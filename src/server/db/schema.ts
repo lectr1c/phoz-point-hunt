@@ -3,11 +3,12 @@
 
 import { sql } from "drizzle-orm";
 import {
-  index,
-  pgTableCreator,
-  serial,
-  timestamp,
-  varchar,
+    boolean,
+    index, integer, pgEnum,
+    pgTableCreator,
+    serial, text,
+    timestamp,
+    varchar,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -18,17 +19,60 @@ import {
  */
 export const createTable = pgTableCreator((name) => `phoz-point-hunt_${name}`);
 
-export const posts = createTable(
-  "post",
-  {
+export const coupons = createTable("coupons", {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
+    couponCode: text("coupon_code").unique(),
+    couponWorth: integer("coupon_worth"),
+    claimed: boolean("claimed").default(false)
+})
+
+export const roleEnum = pgEnum('role', ['nollan', 'fadder', 'phoz']);
+
+export const users = createTable("users", {
+    id: serial("id").primaryKey(),
+    teamId: integer("team_id").references(() => teams.id),
+    username: text("user_name"),
+    role: roleEnum('role').default("nollan")
+})
+
+export const news = createTable("news", {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id").references(() => users.id),
+    title: varchar("title", { length: 256 }),
+    text: varchar("text", { length: 256 }),
     createdAt: timestamp("created_at")
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt"),
-  },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
+        .default(sql`CURRENT_TIMESTAMP`)
+        .notNull()
+})
+
+export const comments = createTable("news", {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id").references(() => users.id),
+    text: varchar("text", { length: 256 }),
+    createdAt: timestamp("created_at")
+        .default(sql`CURRENT_TIMESTAMP`)
+        .notNull()
+})
+
+export const teams = createTable("teams", {
+    id: serial("id").primaryKey(),
+    teamName: text("team_name").notNull(),
+    totalPoints: integer("total_points").notNull(),
+})
+
+export const points = createTable(
+    "points",
+    {
+        id: serial("id").primaryKey(),
+        userId: integer("user_id").references(() => users.id),
+        couponId: integer("coupon_id").references(() => coupons.id),
+        teamId: integer("team_id").references(() => teams.id),
+        currTeamTotalPoints: integer("curr_team_total_points"),
+        addedAt: timestamp("added_at")
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull()
+    },
+    (table) => ({
+        addedAtIndex: index("added_at_idx").on(table.addedAt),
+    })
 );
