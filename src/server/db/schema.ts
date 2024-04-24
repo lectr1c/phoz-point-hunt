@@ -21,7 +21,7 @@ export const createTable = pgTableCreator((name) => `phoz-point-hunt_${name}`);
 
 export const coupons = createTable("coupons", {
     id: serial("id").primaryKey(),
-    couponCode: text("coupon_code").unique(),
+    couponCode: text("coupon_code").unique().notNull(),
     couponWorth: integer("coupon_worth"),
     claimed: boolean("claimed").default(false)
 })
@@ -29,7 +29,7 @@ export const coupons = createTable("coupons", {
 export const roleEnum = pgEnum('role', ['nollan', 'fadder', 'phoz']);
 
 export const users = createTable("users", {
-    id: serial("id").primaryKey(),
+    id: text("id").primaryKey(),
     teamId: integer("team_id").references(() => teams.id),
     username: text("user_name"),
     role: roleEnum('role').default("nollan")
@@ -37,7 +37,7 @@ export const users = createTable("users", {
 
 export const news = createTable("news", {
     id: serial("id").primaryKey(),
-    userId: integer("user_id").references(() => users.id),
+    userId: text("user_id").references(() => users.id),
     title: varchar("title", { length: 256 }),
     text: varchar("text", { length: 256 }),
     createdAt: timestamp("created_at")
@@ -47,7 +47,7 @@ export const news = createTable("news", {
 
 export const comments = createTable("news", {
     id: serial("id").primaryKey(),
-    userId: integer("user_id").references(() => users.id),
+    userId: text("user_id").references(() => users.id),
     text: varchar("text", { length: 256 }),
     createdAt: timestamp("created_at")
         .default(sql`CURRENT_TIMESTAMP`)
@@ -70,7 +70,6 @@ export const points = createTable(
         currTeamTotalPoints: integer("curr_team_total_points"),
         addedAt: timestamp("added_at")
             .default(sql`CURRENT_TIMESTAMP`)
-            .notNull()
     },
     (table) => ({
         addedAtIndex: index("added_at_idx").on(table.addedAt),
