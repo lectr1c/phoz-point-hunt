@@ -64,7 +64,7 @@ export const points = createTable(
     "points",
     {
         id: serial("id").primaryKey(),
-        userId: integer("user_id").references(() => users.id),
+        userId: text("user_id").references(() => users.id),
         couponId: integer("coupon_id").references(() => coupons.id),
         teamId: integer("team_id").references(() => teams.id),
         currTeamTotalPoints: integer("curr_team_total_points"),
