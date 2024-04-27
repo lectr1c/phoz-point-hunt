@@ -10,7 +10,6 @@ export default function SignButton() {
 
     if (pathname.includes("sign-in") || pathname.includes("sign-up")) return <></>
 
-
     return (
         <div className="flex gap-2 p-2">
             <SignedIn>
