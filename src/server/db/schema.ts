@@ -23,7 +23,8 @@ export const coupons = createTable("coupons", {
     id: serial("id").primaryKey(),
     couponCode: text("coupon_code").unique().notNull(),
     couponWorth: integer("coupon_worth"),
-    claimed: boolean("claimed").default(false)
+    claimed: boolean("claimed").default(false),
+    exported: boolean("exported").default(false),
 })
 
 export const roleEnum = pgEnum('role', ['nollan', 'fadder', 'phoz']);

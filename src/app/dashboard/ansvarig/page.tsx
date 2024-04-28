@@ -1,10 +1,9 @@
 import { auth } from "@clerk/nextjs/server";
 import {redirect} from "next/navigation";
+import GeneratePDF from "~/app/dashboard/_components/GeneratePDF";
 
 export default function AnsvarigDashboard() {
-    const { has } = auth();
-
-    const canAccess = has({ permission: "org:ansvarigdashboard:access" });
+    const canAccess = true;
 
     if(!canAccess){
         redirect("/");
@@ -12,7 +11,7 @@ export default function AnsvarigDashboard() {
     } else {
         return (
             <>
-                Dashboard
+                <GeneratePDF/>
             </>
         )
     }
