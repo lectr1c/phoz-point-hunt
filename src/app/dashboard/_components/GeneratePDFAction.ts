@@ -1,11 +1,12 @@
 'use server'
 import QRCode from "qrcode";
-import SVGtoPDF from "svg-to-pdfkit";
 import {drive_v3, google} from "googleapis";
-import PDFKit from "pdfkit";
+import {PDFDocument } from 'pdf-lib'
 import {db} from "~/server/db";
 import {eq} from "drizzle-orm";
 import {coupons as dbCoupons} from "~/server/db/schema";
+import stream from "stream";
+import { DOMParser } from "xmldom";
 
 
 export default async function GeneratePDFAction(prevState: {title: string, description: string, success: boolean}, formData: FormData) {
@@ -14,8 +15,9 @@ export default async function GeneratePDFAction(prevState: {title: string, descr
         where: eq(dbCoupons.exported, false)
     })
 
-    const doc = new PDFKit();
+    const doc = await PDFDocument.create();
     const SCOPES = ['https://www.googleapis.com/auth/drive'];
+
 
 
 
@@ -32,34 +34,74 @@ export default async function GeneratePDFAction(prevState: {title: string, descr
         auth: auth,
     });
 
+    let page = doc.addPage();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
+    const parser = new DOMParser();
+
+
     coupons.map((coupon, index) => {
-        QRCode.toString('https://phöz.com/reg-points/' + coupon.couponCode, {type: 'svg'}, function (err, string) {
+        QRCode.toString('https://phöz.com/reg-points/' + coupon.couponCode, { type: "svg"}, function (err, string) {
+
             const xIndex = index % 3;
             const yIndex = (index / 3);
             console.log(xIndex, Math.trunc(yIndex));
 
-            if (yIndex >= 1 && yIndex%8 === 0) {
-                doc.addPage();
+            if (yIndex >= 1 && yIndex%7 === 0) {
+                page = doc.addPage();
             }
 
-            const x = (xIndex * 198.4) + 2;
-            const y = (Math.trunc(yIndex%8) * 106) + 2;
 
-            SVGtoPDF(doc, string, x, y, {width: 75, height: 75});
-            doc.font('Courier-Bold').fontSize(13).text("Kod: " + coupon.couponCode, x + 75, y+20, { lineBreak: false });
-            doc.font('Courier-Bold').fontSize(13).text("Poäng: " + coupon.couponWorth, x + 75, y+35, { lineBreak: false });
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+            const svgElement = parser.parseFromString(string, 'image/svg+xml');
 
-            doc.font('Courier').fontSize(9).text('https://phöz.com/reg-points/' + coupon.couponCode, x+5, y + 75, {
-                lineBreak: false
+            console.log(svgElement)
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+            const pathElement = svgElement.getElementsByTagName('path')[1];
+
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
+            const dAttribute = pathElement.getAttribute('d');
+
+
+            const x = (xIndex * 178.4) + 45;
+            const y = (Math.trunc(yIndex%7) * 112) + 50;
+
+            page.drawText("Poäng: " + coupon.couponWorth, {
+                x: x + 75,
+                y: y + 25,
+                size: 13
             });
+
+            page.drawText("Kod: " + coupon.couponCode, {
+                x: x + 75,
+                y: y + 40,
+                size: 13
+            })
+
+            page.drawText('https://phöz.com/reg-points/' + coupon.couponCode, {
+                x: x + 5,
+                y: y + 5,
+                size: 9,
+            })
+
+            if (dAttribute != null) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                page.drawSvgPath(dAttribute, {
+                    x: x,
+                    y: y + 85,
+                    scale: 2
+                })
+            }
         })
     })
 
-    doc.end();
-
+    const bytes = await doc.save({
+        useObjectStreams: true,
+    });
 
     const response = await drive.files.create({
-        media: { body: doc, mimeType: "application/pdf" },
+        media: { body: new stream.PassThrough().end(bytes), mimeType: "application/pdf" },
         requestBody: {
             name: coupons.length + " coupons",
             mimeType: "application/pdf",
@@ -69,6 +111,7 @@ export default async function GeneratePDFAction(prevState: {title: string, descr
         supportsTeamDrives: true,
     })
 
+    console.log(response);
 
     return {title: "string", description: "string", success: false};
 }
