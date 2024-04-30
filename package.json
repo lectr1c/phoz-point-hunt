@@ -40,6 +40,7 @@
     "qrcode": "^1.5.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "short-unique-id": "^5.2.0",
     "svg-to-pdfkit": "^0.1.8",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",

@@ -15,6 +15,10 @@ export default async function GeneratePDFAction(prevState: {title: string, descr
         where: eq(dbCoupons.exported, false)
     })
 
+    if (coupons.length === 0) {
+        return { title: "Inga Kuponger", description: "Alla kuponger som finns i systemet ligger i ett pdf", success: false }
+    }
+
     const doc = await PDFDocument.create();
     const SCOPES = ['https://www.googleapis.com/auth/drive'];
 
@@ -97,7 +101,7 @@ export default async function GeneratePDFAction(prevState: {title: string, descr
         useObjectStreams: true,
     });
 
-    const response = await drive.files.create({
+    await drive.files.create({
         media: { body: new stream.PassThrough().end(bytes), mimeType: "application/pdf" },
         requestBody: {
             name: coupons.length + " coupons",
@@ -110,5 +114,5 @@ export default async function GeneratePDFAction(prevState: {title: string, descr
 
     await db.update(dbCoupons).set({ exported: true }).where(eq(dbCoupons.exported, false))
 
-    return {title: "string", description: "string", success: false};
+    return {title: "Fil uppladdat", description: "Filen är uppe nu på google drive i Kuponger mappen", success: true};
 }
