@@ -32,3 +32,7 @@ function SubmitButton() {
         <Button disabled={pending} className={!pending ? "disabled:cursor-progress disabled:bg-slate-600" : ""} type="submit">{pending ? "Genererar..." : "Generera"}</Button>
     )
 }
+
+
+//Choose Amount
+//Points Worth

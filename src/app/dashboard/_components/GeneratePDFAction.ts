@@ -18,9 +18,6 @@ export default async function GeneratePDFAction(prevState: {title: string, descr
     const doc = await PDFDocument.create();
     const SCOPES = ['https://www.googleapis.com/auth/drive'];
 
-
-
-
     const auth = new google.auth.GoogleAuth({
         scopes: SCOPES,
         credentials: {
@@ -46,7 +43,7 @@ export default async function GeneratePDFAction(prevState: {title: string, descr
             const yIndex = (index / 3);
             console.log(xIndex, Math.trunc(yIndex));
 
-            if (yIndex >= 1 && yIndex%7 === 0) {
+            if (yIndex >= 1 && yIndex%8 === 0) {
                 page = doc.addPage();
             }
 
@@ -64,8 +61,8 @@ export default async function GeneratePDFAction(prevState: {title: string, descr
             const dAttribute = pathElement.getAttribute('d');
 
 
-            const x = (xIndex * 178.4) + 45;
-            const y = (Math.trunc(yIndex%7) * 112) + 50;
+            const x = (xIndex * 198.4) + 24;
+            const y = (Math.trunc(yIndex%8) * 106) + 10;
 
             page.drawText("Poäng: " + coupon.couponWorth, {
                 x: x + 75,
@@ -105,15 +102,13 @@ export default async function GeneratePDFAction(prevState: {title: string, descr
         requestBody: {
             name: coupons.length + " coupons",
             mimeType: "application/pdf",
-            driveId: "0AGqg92ZiFbLQUk9PVA",
-            parents: ["0AGqg92ZiFbLQUk9PVA"]
+            driveId: process.env.DRIVE_ID,
+            parents: ["" + process.env.FOLDER_ID]
         },
         supportsTeamDrives: true,
     })
 
-    console.log(response);
+    await db.update(dbCoupons).set({ exported: true }).where(eq(dbCoupons.exported, false))
 
     return {title: "string", description: "string", success: false};
 }
-
-//TODO: https://www.npmjs.com/package/pdf-lib
