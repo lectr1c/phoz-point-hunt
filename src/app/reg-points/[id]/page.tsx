@@ -4,10 +4,11 @@ import {Label} from "~/components/ui/label";
 import {Button} from "~/components/ui/button";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "~/components/ui/card";
 import { useToast } from "~/components/ui/use-toast"
-import {useFormState} from "react-dom";
+import {useFormState, useFormStatus} from "react-dom";
 import registerPoints from "~/app/reg-points/_registerPointsAction";
 import {useEffect} from "react";
 import {redirect} from "next/navigation";
+import {SignedIn, SignedOut, SignInButton, SignOutButton} from "@clerk/nextjs";
 
 export default function RegisterPoints({ params } : { params: { id: string } }) {
 
@@ -39,13 +40,32 @@ export default function RegisterPoints({ params } : { params: { id: string } }) 
                   <form action={formAction} className="h-min flex flex-col gap-y-2">
                       <Label htmlFor="code">Kod</Label>
                       <Input id="code" name="code" placeholder="Points Code" defaultValue={params.id} required/>
-                      <Button type="submit">Registrera poäng</Button>
+                      <SignedIn>
+                          <SubmitButton/>
+                      </SignedIn>
                   </form>
+                  <SignedOut>
+                      <SignInButton><Button className="w-full mt-3">Sign In</Button></SignInButton>
+                  </SignedOut>
               </CardContent>
               <CardFooter>
-                  Koden kan användas bara en gång!
+                  <SignedIn>
+                      Koden kan användas bara en gång!
+                      <SignOutButton><Button className="w-full mt-3">Sign Out</Button></SignOutButton>
+                  </SignedIn>
+                  <SignedOut>
+                      Du behöver logga in innan du lägger poäng
+                  </SignedOut>
               </CardFooter>
           </Card>
       </div>
   );
+}
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+
+    return (
+        <Button disabled={pending} className={!pending ? "disabled:cursor-progress disabled:bg-slate-600" : ""} type="submit">{pending ? "Registrerar..." : "Registrera poäng"}</Button>
+    )
 }
