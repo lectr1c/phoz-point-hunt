@@ -14,8 +14,6 @@ export default async function registerPoints(prevState: {title: string, descript
         userId: formData.get('userId') as string,
     }
 
-    console.log(rawFormData.teamId, rawFormData.userId)
-
     if (rawFormData.teamId) {
         console.log(rawFormData.teamId);
         await db.insert(users).values({
@@ -30,7 +28,7 @@ export default async function registerPoints(prevState: {title: string, descript
     const coupon = await db.query.coupons.findFirst({
         where: eq(coupons.couponCode, rawFormData.coupon)
     })
-    if (!coupon?.couponWorth || !coupon) return { title: 'Fel inträffat', description: 'Coupon not found', success: false };
+    if (!coupon?.couponWorth || !coupon) return { title: 'Fel inträffat', description: 'Kupongen hittades inte', success: false };
 
     if (coupon.claimed) return { title: 'Fel inträffat', description: 'Koden användes redan!', success: false };
 
@@ -38,6 +36,14 @@ export default async function registerPoints(prevState: {title: string, descript
 
     const user = await currentUser();
     if (!user) return { title: 'Fel inträffat', description: 'Du är inte inloggad', success: false };
+
+    if (rawFormData.teamId) {
+        await db.insert(users).values({
+            id: rawFormData.userId,
+            teamId: rawFormData.teamId,
+            username: rawFormData.username,
+        })
+    }
 
     const dbUserTeams = await db.select().from(users).innerJoin(teams, eq(users.teamId, teams.id)).where(eq(users.id, user.id));
     if (!dbUserTeams[0]) return { title: 'Fel Inträffat', description: 'Du är inte med i nån lag', success: false };
