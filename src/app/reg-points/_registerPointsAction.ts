@@ -3,11 +3,26 @@ import {db} from "~/server/db";
 import {eq} from "drizzle-orm";
 import {coupons, points, teams, users} from "~/server/db/schema";
 import {currentUser} from "@clerk/nextjs/server";
+import * as console from "node:console";
 
 export default async function registerPoints(prevState: {title: string, description: string, success: boolean}, formData: FormData) {
 
     const rawFormData = {
         coupon: formData.get('code') as string,
+        teamId: formData.get('team') as unknown as number,
+        username: formData.get('username') as string,
+        userId: formData.get('userId') as string,
+    }
+
+    console.log(rawFormData.teamId, rawFormData.userId)
+
+    if (rawFormData.teamId) {
+        console.log(rawFormData.teamId);
+        await db.insert(users).values({
+            id: rawFormData.userId,
+            teamId: rawFormData.teamId,
+            username: rawFormData.username,
+        })
     }
 
     if (rawFormData.coupon == null) return { title: 'Fel inträffat', description: 'Kod fältet är tom', success: false };
