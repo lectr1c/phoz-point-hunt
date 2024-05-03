@@ -20,21 +20,22 @@ export default async function HomePage() {
       .innerJoin(users, eq(points.userId, users.id))
       .innerJoin(coupons, eq(points.couponId, coupons.id)).orderBy(desc(points.addedAt));
 
+  const teamsRes = await db.query.teams.findMany({});
 
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-amber-300 text-black">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-red-900">
           <PointsTableView pointRows={pointRows}/>
 
-        <LineChart
-        className="mt-4 h-72"
-        data={chartdata}
-        index="date"
-        yAxisWidth={65}
-        categories={['SemiAnalysis', 'The Pragmatic Engineer']}
-        colors={['indigo', 'cyan']}
-        valueFormatter={valueFormatter}
-        />
+
+        {/*<LineChart*/}
+        {/*className="mt-4 h-72"*/}
+        {/*data={pointRows}*/}
+        {/*index="addedAt"*/}
+        {/*yAxisWidth={65}*/}
+        {/*categories={teamsRes.map((team) => team.teamName)}*/}
+        {/*colors={['indigo', 'cyan']}*/}
+        {/*/>*/}
 
 
     </main>

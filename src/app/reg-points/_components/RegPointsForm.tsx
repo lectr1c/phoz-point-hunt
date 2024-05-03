@@ -9,7 +9,6 @@ import registerPoints from "~/app/reg-points/_registerPointsAction";
 import {useEffect} from "react";
 import {redirect} from "next/navigation";
 import {SignedIn, SignedOut, SignInButton, SignOutButton} from "@clerk/nextjs";
-import FreshUserInit from "~/app/reg-points/_components/FreshUserInit";
 
 export default function RegisterPointsForm({ params, children } : { params: { id: string }, children: React.ReactNode }) {
 
