@@ -27,13 +27,11 @@ export const coupons = createTable("coupons", {
     exported: boolean("exported").default(false),
 })
 
-export const chartdata = createTable("chart_data", {
+export const chartData = createTable("chart_data", {
     id: serial("id").primaryKey(),
     teamId: integer("team_id").references(() => teams.id),
     dayDate: text("day_date").unique().notNull(),
-    todayTotalPoints: integer("today_total_points"),
-    addedDate: timestamp("created_at")
-        .default(sql`CURRENT_TIMESTAMP`)
+    todayTotalPoints: integer("today_total_points")
 })
 
 export const roleEnum = pgEnum('role', ['nollan', 'fadder', 'phoz']);

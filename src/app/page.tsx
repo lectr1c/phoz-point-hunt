@@ -3,7 +3,7 @@ import PointsTableView from "~/app/_components/PointsTableView";
 import {db} from "~/server/db";
 import {coupons, points, teams, users} from "~/server/db/schema";
 import {desc, eq} from "drizzle-orm";
-import { LineChart } from '@tremor/react';
+import {Card} from "~/components/ui/card";
 
 export default async function HomePage() {
 
@@ -23,19 +23,36 @@ export default async function HomePage() {
   const teamsRes = await db.query.teams.findMany({});
 
 
+  const data = [
+      {
+          addedAt: "Feb 24",
+          Jokers: 100,
+          Batmen: 200
+      },
+      {
+          addedAt: "Feb 25",
+          Jokers: 150,
+          Batmen: 300
+      },
+      {
+          addedAt: "Feb 26",
+          Jokers: 200
+      },
+      {
+          addedAt: "Feb 24",
+          Jokers: 250,
+          Batmen: 350
+      }
+  ]
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-red-900">
+    <main className="flex min-h-screen flex-col items-center justify-center">
           <PointsTableView pointRows={pointRows}/>
 
 
-        {/*<LineChart*/}
-        {/*className="mt-4 h-72"*/}
-        {/*data={pointRows}*/}
-        {/*index="addedAt"*/}
-        {/*yAxisWidth={65}*/}
-        {/*categories={teamsRes.map((team) => team.teamName)}*/}
-        {/*colors={['indigo', 'cyan']}*/}
-        {/*/>*/}
+        <Card className="p-10 w-[700px]">
+            
+        </Card>
 
 
     </main>

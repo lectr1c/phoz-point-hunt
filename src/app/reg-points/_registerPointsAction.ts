@@ -1,7 +1,7 @@
 'use server'
 import {db} from "~/server/db";
 import {eq} from "drizzle-orm";
-import {coupons, points, teams, users} from "~/server/db/schema";
+import {chartData, coupons, points, teams, users} from "~/server/db/schema";
 import {currentUser} from "@clerk/nextjs/server";
 import * as console from "node:console";
 
@@ -52,15 +52,21 @@ export default async function registerPoints(prevState: {title: string, descript
 
     const newPoints = dbUserTeam.teams.totalPoints + coupon.couponWorth;
 
-
-
     await db.insert(points).values({
         teamId: dbUserTeam.teams.id, couponId: coupon.id, currTeamTotalPoints: newPoints, userId: user.id
-    })
+    });
 
     await db.update(teams).set({ totalPoints: newPoints }).where(eq(teams.id, dbUserTeam.teams.id));
 
     await db.update(coupons).set({ claimed: true }).where(eq(coupons.couponCode, rawFormData.coupon));
+
+    const todayDateString = new Date().toDateString();
+
+    const changedRow = await db.update(chartData).set({ todayTotalPoints: newPoints }).where(eq(chartData.dayDate, todayDateString)).returning({updatedId: chartData.id});
+
+    if (changedRow.length === 0) {
+        await db.insert(chartData).values({todayTotalPoints: newPoints, teamId: dbUserTeam.teams.id, dayDate: todayDateString})
+    }
 
 
     return { title: `${coupon.couponWorth} Poäng Registrerades!`, description: `Ditt lag ${dbUserTeam.teams.teamName} har nu ${newPoints} poäng!`, success: true };
