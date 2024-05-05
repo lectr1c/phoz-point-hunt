@@ -4,24 +4,32 @@ import {db} from "~/server/db";
 import {coupons, points, teams, users} from "~/server/db/schema";
 import {desc, eq} from "drizzle-orm";
 import {Card} from "~/components/ui/card";
+import {rowId} from "drizzle-orm/sqlite-core/expressions";
 
 export default async function HomePage() {
 
-  const pointRows = await db.select({
-      pointsId: points.id,
-      username: users.username,
-      teamname: teams.teamName,
-      addedAt: points.addedAt,
-      currTeamTotalPoints: points.currTeamTotalPoints,
-      couponWorth: coupons.couponWorth,
-  })
+  const query = await db.select()
       .from(points)
-      .innerJoin(teams, eq(points.teamId, teams.id))
+      .where(eq(teams.id, 2))
       .innerJoin(users, eq(points.userId, users.id))
-      .innerJoin(coupons, eq(points.couponId, coupons.id)).orderBy(desc(points.addedAt));
+      .innerJoin(teams, eq(users.teamId, teams.id))
+      .innerJoin(coupons, eq(points.couponId, coupons.id))
 
   const teamsRes = await db.query.teams.findMany({});
 
+  const  res = query
+      .map((row) => { return row.coupons.couponWorth; })
+      .reduce((acc, row) => {
+          if (acc != null && row != null) {
+              return acc + row;
+          }
+          return 0;
+  })
+
+    console.log(res);
+
+
+  console.log(query);
 
   const data = [
       {
@@ -47,7 +55,7 @@ export default async function HomePage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
-          <PointsTableView pointRows={pointRows}/>
+          {/*<PointsTableView pointRows={pointRows}/>*/}
 
 
         <Card className="p-10 w-[700px]">

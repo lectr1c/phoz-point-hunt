@@ -65,7 +65,6 @@ export const comments = createTable("news", {
 export const teams = createTable("teams", {
     id: serial("id").primaryKey(),
     teamName: text("team_name").notNull(),
-    totalPoints: integer("total_points").notNull(),
 })
 
 export const points = createTable(
@@ -74,8 +73,6 @@ export const points = createTable(
         id: serial("id").primaryKey(),
         userId: text("user_id").references(() => users.id),
         couponId: integer("coupon_id").references(() => coupons.id),
-        teamId: integer("team_id").references(() => teams.id),
-        currTeamTotalPoints: integer("curr_team_total_points"),
         addedAt: timestamp("added_at")
             .default(sql`CURRENT_TIMESTAMP`)
     },
