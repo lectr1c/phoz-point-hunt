@@ -1,15 +1,16 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { sql } from "drizzle-orm";
+import {eq, sql} from "drizzle-orm";
 import {
     boolean,
-    index, integer, pgEnum,
-    pgTableCreator,
+    index, integer, pgEnum, pgMaterializedView, pgTable,
+    pgTableCreator, pgView,
     serial, text,
     timestamp,
     varchar,
 } from "drizzle-orm/pg-core";
+import * as querystring from "node:querystring";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -80,3 +81,41 @@ export const points = createTable(
         addedAtIndex: index("added_at_idx").on(table.addedAt),
     })
 );
+
+// // export const userView = pgMaterializedView("user_view").as((qb) => qb.select().from(users));
+//
+// export const pointsByDateView = pgView("points_by_date")
+//         .as(qb => qb.select().from(sql`
+//                 SELECT
+//                   dates.d AS view_date,
+//                   u.team_id,
+//                   COALESCE(SUM(c.coupon_worth), 0) AS total_points_up_to_date
+//                 FROM
+//                   (
+//                     SELECT
+//                       GENERATE_SERIES(
+//                         (
+//                           SELECT
+//                             MIN(added_at)
+//                           FROM
+//                             "phoz-point-hunt_points"
+//                         ),
+//                         (
+//                           SELECT
+//                             CURRENT_DATE
+//                         ),
+//                         '1 day'::INTERVAL
+//                       )::date AS d
+//                   ) dates
+//                   CROSS JOIN "phoz-point-hunt_users" u
+//                   LEFT JOIN "phoz-point-hunt_points" p ON p.user_id = u.id
+//                   LEFT JOIN "phoz-point-hunt_coupons" c ON c.id = p.coupon_id
+//                   AND p.added_at <= dates.d
+//                 GROUP BY
+//                   dates.d,
+//                   u.team_id
+//                 ORDER BY
+//                   dates.d,
+//                   u.team_id;
+//   `));
+//

@@ -14,7 +14,6 @@ export default function PointsTableView({ pointRows } : { pointRows: {
     username: string | null;
     teamname: string;
     addedAt: Date | null;
-    currTeamTotalPoints: number | null;
     couponWorth: number | null; }[]
     }) {
 
@@ -26,7 +25,7 @@ export default function PointsTableView({ pointRows } : { pointRows: {
                 <TableHeader>
                     <TableRow>
                         <TableHead className="w-[100px]">NØllan</TableHead>
-                        <TableHead>Lagnamn</TableHead>
+                        <TableHead>Lagss</TableHead>
                         <TableHead>Poäng</TableHead>
                         <TableHead className="text-right">Registrerad</TableHead>
                     </TableRow>
