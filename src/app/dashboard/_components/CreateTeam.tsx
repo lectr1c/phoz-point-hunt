@@ -1,0 +1,144 @@
+"use client";
+import { useFormState, useFormStatus } from "react-dom";
+import { Button } from "~/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import CreateTeamAction from "~/app/dashboard/_components/CreateTeamAction";
+import { useToast } from "~/components/ui/use-toast";
+import { useEffect, useState } from "react";
+import { Label } from "~/components/ui/label";
+import { Input } from "~/components/ui/input";
+import { SketchPicker } from "react-color";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
+
+export default function CreateTeam() {
+  const [state, formAction] = useFormState(CreateTeamAction, {
+    title: "",
+    description: "",
+    success: false,
+  });
+
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (state.title === "") return;
+
+    toast({
+      title: state.title,
+      description: state.description,
+    });
+  }, [state]);
+
+  const [mainColor, setMainColor] = useState("#F00");
+  const [secondaryColor, setSecondaryColor] = useState("#00F");
+
+  return (
+    <div className="flex w-fit items-center justify-center">
+      <Card>
+        <CardHeader>
+          <CardTitle>Skapa Lag</CardTitle>
+          <CardDescription></CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form action={formAction} className="flex h-min flex-col gap-y-2">
+            <Label htmlFor="teamname">Lagnamn</Label>
+            <Input
+              id="teamname"
+              name="teamname"
+              placeholder="Fx-jägarna"
+              required
+            />
+            <Label>Primär lag färg</Label>
+            <Popover>
+              <PopoverTrigger>
+                <Button
+                  type={"button"}
+                  className="w-full"
+                  style={{
+                    backgroundColor: mainColor,
+                  }}
+                ></Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-fit">
+                <SketchPicker
+                  color={mainColor}
+                  onChange={(color) => {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
+                    setMainColor(color.hex);
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
+            {/*TODO: Hydration popover fix*/}
+            <Label>Sekundär lag färg</Label>
+            <Popover>
+              <PopoverTrigger>
+                <Button
+                  type={"button"}
+                  className="w-full"
+                  style={{
+                    backgroundColor: secondaryColor,
+                  }}
+                ></Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-fit">
+                <SketchPicker
+                  color={secondaryColor}
+                  onChange={(color) => {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
+                    setSecondaryColor(color.hex);
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
+            <Input
+              type="hidden"
+              id="mainColor"
+              name="mainColor"
+              defaultValue={mainColor}
+            />
+            <Input
+              type="hidden"
+              id="secondaryColor"
+              name="secondaryColor"
+              defaultValue={secondaryColor}
+            />
+            <SubmitButton />
+          </form>
+          <div
+            className="mt-10 h-[36px] w-full rounded-[0.5rem] bg-blue-800"
+            style={{
+              outline: `solid 6px ${secondaryColor}`,
+              backgroundColor: `${mainColor}`,
+            }}
+          ></div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button
+      disabled={pending}
+      className={
+        !pending ? "disabled:cursor-progress disabled:bg-slate-600" : ""
+      }
+      type="submit"
+    >
+      {pending ? "Genererar..." : "Generera"}
+    </Button>
+  );
+}
