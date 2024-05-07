@@ -25,7 +25,6 @@ export default async function CreateCouponsAction(prevState: {title: string, des
     const newCoupons: {
         couponWorth: number,
         couponCode: string,
-        claimed: boolean,
         exported: boolean,
     }[] = []
 
@@ -33,13 +32,12 @@ export default async function CreateCouponsAction(prevState: {title: string, des
         newCoupons.push({
             couponWorth: couponWorth,
             couponCode: idGenerator.rnd(),
-            claimed: false,
             exported: false,
         })
     }
 
 
-    await db.insert(coupons).values(newCoupons)
+    await db.insert(coupons).values(newCoupons);
 
     return { title: "Skapade Kuponger", description: `Skapade ${couponAmt} kuponger med värde ${couponWorth}`, success: true };
 }

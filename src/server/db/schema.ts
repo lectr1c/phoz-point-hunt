@@ -1,14 +1,21 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import {eq, sql} from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import {
-    boolean,
-    index, integer, pgEnum, pgMaterializedView, pgTable,
-    pgTableCreator, pgView,
-    serial, text,
-    timestamp,
-    varchar,
+  boolean,
+  date,
+  index,
+  integer,
+  pgEnum,
+  pgMaterializedView,
+  pgTable,
+  pgTableCreator,
+  pgView,
+  serial,
+  text,
+  timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
 import * as querystring from "node:querystring";
 
@@ -21,66 +28,65 @@ import * as querystring from "node:querystring";
 export const createTable = pgTableCreator((name) => `phoz-point-hunt_${name}`);
 
 export const coupons = createTable("coupons", {
-    id: serial("id").primaryKey(),
-    couponCode: text("coupon_code").unique().notNull(),
-    couponWorth: integer("coupon_worth"),
-    claimed: boolean("claimed").default(false),
-    exported: boolean("exported").default(false),
-})
+  id: serial("id").primaryKey(),
+  couponCode: text("coupon_code").unique().notNull(),
+  couponWorth: integer("coupon_worth"),
+  exported: boolean("exported").default(false),
+});
 
-export const chartData = createTable("chart_data", {
-    id: serial("id").primaryKey(),
-    teamId: integer("team_id").references(() => teams.id),
-    dayDate: text("day_date").unique().notNull(),
-    todayTotalPoints: integer("today_total_points")
-})
-
-export const roleEnum = pgEnum('role', ['nollan', 'fadder', 'phoz']);
+export const roleEnum = pgEnum("role", ["nollan", "fadder", "phoz"]);
 
 export const users = createTable("users", {
-    id: text("id").primaryKey(),
-    teamId: integer("team_id").references(() => teams.id),
-    username: text("user_name"),
-    role: roleEnum('role').default("nollan")
-})
+  id: text("id").primaryKey(),
+  teamId: integer("team_id").references(() => teams.id),
+  username: text("user_name"),
+  role: roleEnum("role").default("nollan"),
+});
 
 export const news = createTable("news", {
-    id: serial("id").primaryKey(),
-    userId: text("user_id").references(() => users.id),
-    title: varchar("title", { length: 256 }),
-    text: varchar("text", { length: 256 }),
-    createdAt: timestamp("created_at")
-        .default(sql`CURRENT_TIMESTAMP`)
-        .notNull()
-})
+  id: serial("id").primaryKey(),
+  userId: text("user_id").references(() => users.id),
+  title: varchar("title", { length: 256 }),
+  text: varchar("text", { length: 256 }),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
 
 export const comments = createTable("news", {
-    id: serial("id").primaryKey(),
-    userId: text("user_id").references(() => users.id),
-    text: varchar("text", { length: 256 }),
-    createdAt: timestamp("created_at")
-        .default(sql`CURRENT_TIMESTAMP`)
-        .notNull()
-})
+  id: serial("id").primaryKey(),
+  userId: text("user_id").references(() => users.id),
+  text: varchar("text", { length: 256 }),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
 
 export const teams = createTable("teams", {
-    id: serial("id").primaryKey(),
-    teamName: text("team_name").notNull(),
-})
+  id: serial("id").primaryKey(),
+  teamName: text("team_name").notNull(),
+  mainColor: text("main_color").notNull(),
+  secondaryColor: text("secondary_color").notNull(),
+});
 
 export const points = createTable(
-    "points",
-    {
-        id: serial("id").primaryKey(),
-        userId: text("user_id").references(() => users.id),
-        couponId: integer("coupon_id").references(() => coupons.id),
-        addedAt: timestamp("added_at")
-            .default(sql`CURRENT_TIMESTAMP`)
-    },
-    (table) => ({
-        addedAtIndex: index("added_at_idx").on(table.addedAt),
-    })
+  "points",
+  {
+    id: serial("id").primaryKey(),
+    userId: text("user_id").references(() => users.id),
+    couponId: integer("coupon_id").references(() => coupons.id),
+    addedAt: timestamp("added_at").default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => ({
+    addedAtIndex: index("added_at_idx").on(table.addedAt),
+  }),
 );
+
+export const pointsByDateView = pgView("points_by_date", {
+  viewDate: date("view_date").notNull(),
+  teamId: integer("team_id").notNull(),
+  totalPointsByDate: integer("total_points_up_to_date").notNull(),
+}).existing();
 
 // // export const userView = pgMaterializedView("user_view").as((qb) => qb.select().from(users));
 //
@@ -102,10 +108,10 @@ export const points = createTable(
 //                         ),
 //                         (
 //                           SELECT
-//                             CURRENT_DATE
+//                             CURRENT_DATE + INTERVAL '1 day'
 //                         ),
 //                         '1 day'::INTERVAL
-//                       )::date AS d
+//                       )::timestamp AS d
 //                   ) dates
 //                   CROSS JOIN "phoz-point-hunt_users" u
 //                   LEFT JOIN "phoz-point-hunt_points" p ON p.user_id = u.id

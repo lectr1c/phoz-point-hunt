@@ -1,7 +1,7 @@
 'use server'
 import {db} from "~/server/db";
-import {eq, sql} from "drizzle-orm";
-import {chartData, coupons, points, teams, users} from "~/server/db/schema";
+import {and, desc, eq, gte} from "drizzle-orm";
+import { coupons, points, pointsByDateView, teams, users} from "~/server/db/schema";
 import {currentUser} from "@clerk/nextjs/server";
 import * as console from "node:console";
 
@@ -30,9 +30,12 @@ export default async function registerPoints(prevState: {title: string, descript
     })
     if (!coupon?.couponWorth || !coupon) return { title: 'Fel inträffat', description: 'Kupongen hittades inte', success: false };
 
-    if (coupon.claimed) return { title: 'Fel inträffat', description: 'Koden användes redan!', success: false };
 
+    const pointsQuery = await db.query.points.findFirst({
+        where: eq(points.couponId, coupon.id)
+    })
 
+    if (pointsQuery) return { title: 'Fel inträffat', description: 'Koden användes redan!', success: false };
 
     const user = await currentUser();
     if (!user) return { title: 'Fel inträffat', description: 'Du är inte inloggad', success: false };
@@ -50,10 +53,16 @@ export default async function registerPoints(prevState: {title: string, descript
 
     const dbUserTeam = dbUserTeams[0];
 
-    await db.update(coupons).set({ claimed: true }).where(eq(coupons.couponCode, rawFormData.coupon));
+    await db.insert(points).values({
+        couponId: coupon.id, userId: user.id
+    });
 
     const todayDateString = new Date().toDateString();
 
+    const date = new Date();
+    date.setHours(0,0,0,0);
+    const newPoints = await db.select().from(pointsByDateView)
+        .where(and(gte(pointsByDateView.viewDate, date), eq(pointsByDateView.teamId, dbUserTeam.teams.id))).orderBy(desc(pointsByDateView.viewDate));
 
-    return { title: `${coupon.couponWorth} Poäng Registrerades!`, description: `Ditt lag ${dbUserTeam.teams.teamName} har ${coupon.couponWorth} mer poäng!`, success: true };
+    return { title: `${coupon.couponWorth} Poäng Registrerades!`, description: `Ditt lag ${dbUserTeam.teams.teamName} har ${newPoints[0]!.totalPointsByDate} poäng!`, success: true };
 }

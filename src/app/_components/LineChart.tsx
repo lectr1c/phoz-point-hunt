@@ -1,7 +1,25 @@
 'use client'
 
 import {Line} from "react-chartjs-2";
-import {CategoryScale, Chart, LinearScale, PointElement, LineElement} from 'chart.js';
+import {Chart,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend} from 'chart.js';
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call
+Chart.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 
 export default function LineChart({
@@ -12,7 +30,7 @@ export default function LineChart({
     labels: string[];
     datasets: {
       label: string;
-      data: string[];
+      data: number[];
       borderColor: string;
       backgroundColor: string;
     }[];
@@ -25,13 +43,9 @@ export default function LineChart({
     };
   };
 }) {
-  Chart.register(CategoryScale);
-  Chart.register(LinearScale);
-  Chart.register(PointElement);
-  Chart.register(LineElement);
-
 
   return <Line
+      height={250}
       options={options}
       data={data}
   />;
