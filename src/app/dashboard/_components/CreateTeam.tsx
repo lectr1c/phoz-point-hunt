@@ -59,15 +59,13 @@ export default function CreateTeam() {
             />
             <Label>Primär lag färg</Label>
             <Popover>
-              <PopoverTrigger>
-                <Button
-                  type={"button"}
-                  className="w-full"
-                  style={{
-                    backgroundColor: mainColor,
-                  }}
-                ></Button>
-              </PopoverTrigger>
+              <PopoverTrigger
+                type={"button"}
+                className="h-[36px] w-full rounded-[0.5rem]"
+                style={{
+                  backgroundColor: mainColor,
+                }}
+              ></PopoverTrigger>
               <PopoverContent className="w-fit">
                 <SketchPicker
                   color={mainColor}
@@ -78,18 +76,15 @@ export default function CreateTeam() {
                 />
               </PopoverContent>
             </Popover>
-            {/*TODO: Hydration popover fix*/}
             <Label>Sekundär lag färg</Label>
             <Popover>
-              <PopoverTrigger>
-                <Button
-                  type={"button"}
-                  className="w-full"
-                  style={{
-                    backgroundColor: secondaryColor,
-                  }}
-                ></Button>
-              </PopoverTrigger>
+              <PopoverTrigger
+                type={"button"}
+                className="h-[36px] w-full rounded-[0.5rem]"
+                style={{
+                  backgroundColor: secondaryColor,
+                }}
+              ></PopoverTrigger>
               <PopoverContent className="w-fit">
                 <SketchPicker
                   color={secondaryColor}
