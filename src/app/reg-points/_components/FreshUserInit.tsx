@@ -42,13 +42,19 @@ export default async function FreshUserInit() {
             </SelectContent>
           </Select>
         </div>
-        <Label htmlFor="username">Användarenamn</Label>
-        <Input
-          id="username"
-          name="username"
-          placeholder="Användarenamn"
-          defaultValue={user.username ? user.username + "" : ""}
-        />
+        {dbUser?.username == null ? (
+          <>
+            <Label htmlFor="username">Användarenamn</Label>
+            <Input
+              id="username"
+              name="username"
+              placeholder="Användarenamn"
+              defaultValue={user.username ? user.username + "" : ""}
+            />
+          </>
+        ) : (
+          <></>
+        )}
         <Input
           type="hidden"
           id="userId"

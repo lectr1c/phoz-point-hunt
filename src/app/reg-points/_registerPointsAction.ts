@@ -22,13 +22,21 @@ export default async function registerPoints(
     userId: formData.get("userId") as string,
   };
 
-  if (rawFormData.teamId) {
-    console.log(rawFormData.teamId);
+  if (rawFormData.teamId != null && rawFormData.username != null) {
     await db.insert(users).values({
       id: rawFormData.userId,
       teamId: rawFormData.teamId,
       username: rawFormData.username,
     });
+  }
+
+  if (rawFormData.teamId != null && rawFormData.username == null) {
+    await db
+      .update(users)
+      .set({
+        teamId: rawFormData.teamId,
+      })
+      .where(eq(users.id, rawFormData.userId));
   }
 
   if (rawFormData.coupon == null)
@@ -66,14 +74,6 @@ export default async function registerPoints(
       description: "Du är inte inloggad",
       success: false,
     };
-
-  if (rawFormData.teamId) {
-    await db.insert(users).values({
-      id: rawFormData.userId,
-      teamId: rawFormData.teamId,
-      username: rawFormData.username,
-    });
-  }
 
   const dbUserTeams = await db
     .select()

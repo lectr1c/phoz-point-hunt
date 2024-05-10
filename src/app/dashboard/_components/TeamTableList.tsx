@@ -20,6 +20,7 @@ import { useEffect } from "react";
 import { redirect } from "next/navigation";
 import DeleteTeamAction from "~/app/dashboard/_components/DeleteTeamAction";
 import { Input } from "~/components/ui/input";
+import TeamColorCircle from "~/components/TeamColorCircle";
 
 export default function TeamTableList({
   teamsQuery,
@@ -62,7 +63,7 @@ export default function TeamTableList({
           <TableHeader>
             <TableRow>
               <TableHead className="w-[20px]"></TableHead>
-              <TableHead className="w-[100px]">Användarenamn</TableHead>
+              <TableHead className="w-[100px]">Lagnamn</TableHead>
               <TableHead className="">Hantera</TableHead>
             </TableRow>
           </TableHeader>
@@ -71,13 +72,10 @@ export default function TeamTableList({
               return (
                 <TableRow key={team.id}>
                   <TableCell className="w-fit">
-                    <div
-                      className="radius h-[16px] w-[16px] rounded-2xl outline outline-4"
-                      style={{
-                        backgroundColor: team.mainColor,
-                        outlineColor: team.secondaryColor,
-                      }}
-                    ></div>
+                    <TeamColorCircle
+                      mainColor={team.mainColor}
+                      secondaryColor={team.secondaryColor}
+                    />
                   </TableCell>
                   <TableCell className="font-medium">{team.teamName}</TableCell>
                   <TableCell className={"font-bold opacity-70"}>

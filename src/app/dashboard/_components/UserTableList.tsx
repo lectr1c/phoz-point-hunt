@@ -1,27 +1,38 @@
+"use client";
 import { Card } from "~/components/ui/card";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { db } from "~/server/db";
-import { eq } from "drizzle-orm";
-import { teams, users } from "~/server/db/schema";
-import { Button } from "~/components/ui/button";
+import TeamColorCircle from "~/components/TeamColorCircle";
+import DropDownButton from "~/components/DropDownButton";
+import UserActionsForm from "~/app/dashboard/_forms/UserActionsForm";
 
-export default async function UserTableList() {
-  const usersQuery = await db
-    .select()
-    .from(users)
-    .innerJoin(teams, eq(teams.id, users.teamId));
-
+export default function UserTableList({
+  usersQuery,
+}: {
+  usersQuery: {
+    users: {
+      id: string;
+      role: "nollan" | "fadder" | "ansvarig" | "phöz" | null;
+      teamId: number | null;
+      username: string | null;
+    };
+    teams: {
+      id: number;
+      teamName: string;
+      mainColor: string;
+      secondaryColor: string;
+    };
+  }[];
+}) {
   return (
     <div className="w-fit">
-      <Card className=" p-10 max-[350px]:p-5">
+      <Card className="p-10 max-[350px]:p-5">
         <Table>
           {/*<TableCaption>A list of your recent invoices.</TableCaption>*/}
           <TableHeader>
@@ -30,7 +41,7 @@ export default async function UserTableList() {
               <TableHead className="w-max-[100px]">Användarenamn</TableHead>
               <TableHead>Roll</TableHead>
               <TableHead className="">Lag</TableHead>
-              <TableHead className="">Hantera</TableHead>
+              <TableHead className=""></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -38,13 +49,10 @@ export default async function UserTableList() {
               return (
                 <TableRow key={user.users.id}>
                   <TableCell className="w-fit">
-                    <div
-                      className="radius h-[16px] w-[16px] rounded-2xl outline outline-4"
-                      style={{
-                        backgroundColor: user.teams.mainColor,
-                        outlineColor: user.teams.secondaryColor,
-                      }}
-                    ></div>
+                    <TeamColorCircle
+                      mainColor={user.teams.mainColor}
+                      secondaryColor={user.teams.secondaryColor}
+                    />
                   </TableCell>
                   <TableCell className="font-medium">
                     {user.users.username}
@@ -56,8 +64,9 @@ export default async function UserTableList() {
                     {user.teams.teamName}
                   </TableCell>
                   <TableCell className={"font-bold opacity-70"}>
-                    <Button className="mr-5">Sätt som fadder</Button>
-                    <Button className="bg-red-600">Ta bort</Button>
+                    <DropDownButton text={`${user.users.username}`}>
+                      <UserActionsForm user={user} />
+                    </DropDownButton>
                   </TableCell>
                 </TableRow>
               );

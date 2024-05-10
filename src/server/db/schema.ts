@@ -34,7 +34,12 @@ export const coupons = createTable("coupons", {
   exported: boolean("exported").default(false),
 });
 
-export const roleEnum = pgEnum("role", ["nollan", "fadder", "phoz"]);
+export const roleEnum = pgEnum("role", [
+  "nollan",
+  "fadder",
+  "ansvarig",
+  "phöz",
+]);
 
 export const users = createTable("users", {
   id: text("id").primaryKey(),
@@ -74,7 +79,9 @@ export const points = createTable(
   {
     id: serial("id").primaryKey(),
     userId: text("user_id").references(() => users.id),
-    couponId: integer("coupon_id").references(() => coupons.id),
+    couponId: integer("coupon_id")
+      .references(() => coupons.id)
+      .notNull(),
     addedAt: timestamp("added_at").default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => ({
