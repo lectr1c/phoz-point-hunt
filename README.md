@@ -12,8 +12,10 @@
 - [X] Handle role changes.
 - [X] Add count and export limit for coupons to PDF
 - [X] Make files downloadable via website.
+- [X] Implement webhook to handle new clerk users.
+- [X] Deploy to vercel.
 - [ ] Refactor code to use Controllers and Db access layer.
 - [ ] Error handling.
 - [ ] News and message system.
-- [ ] Migrate to NextAuth.
+- [ ] ~~Migrate to NextAuth.~~
 - [ ]
