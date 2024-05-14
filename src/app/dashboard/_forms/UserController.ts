@@ -35,7 +35,7 @@ export async function changeUserRole(
     where: eq(users.id, loggedInUser.id),
   });
 
-  if (dbLoggedInUser?.role === "nollan") {
+  if (dbLoggedInUser?.role !== "ansvarig" && dbLoggedInUser?.role !== "phöz") {
     return {
       title: "Fel inträffat",
       description: "Ingen behörighet",
@@ -44,4 +44,10 @@ export async function changeUserRole(
   }
 
   await db.update(users).set({ role: role }).where(eq(users.id, id));
+
+  return {
+    title: "Uppdaterad",
+    description: `Till ${role} rollen`,
+    success: false,
+  };
 }

@@ -8,23 +8,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "~/components/ui/dropdown-menu";
+import { toast } from "~/components/ui/use-toast";
+import { useRouter } from "next/navigation";
+import type { TTeam, TUser } from "~/server/types";
+import ChangeRoleButtons from "~/app/dashboard/_components/ChangeRoleButtons";
 
 export default function UserActionsForm({
   user,
 }: {
   user: {
-    users: {
-      id: string;
-      role: "nollan" | "fadder" | "ansvarig" | "phöz" | null;
-      teamId: number | null;
-      username: string | null;
-    };
-    teams: {
-      id: number;
-      teamName: string;
-      mainColor: string;
-      secondaryColor: string;
-    };
+    users: TUser;
+    teams: TTeam;
   };
 }) {
   // const { toast } = useToast();
@@ -33,6 +27,8 @@ export default function UserActionsForm({
   //   title: state.title,
   //   description: state.description,
   // });
+
+  const router = useRouter();
 
   return (
     <>
@@ -54,9 +50,7 @@ export default function UserActionsForm({
         </Button>
       </DialogParent>
       <DropdownMenuSeparator />
-      <Button onClick={() => changeUserRole(user.users.id, "fadder")}>
-        Sätt som fadder
-      </Button>
+      <ChangeRoleButtons user={user} />
     </>
   );
 }

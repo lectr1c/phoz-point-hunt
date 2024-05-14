@@ -56,45 +56,43 @@ export default function TeamTableList({
   //TODO: Update view to remove row on delete
 
   return (
-    <div className="w-fit">
-      <Card className="w-fit p-10 max-[350px]:p-5">
-        <Table>
-          {/*<TableCaption>A list of your recent invoices.</TableCaption>*/}
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[20px]"></TableHead>
-              <TableHead className="w-[100px]">Lagnamn</TableHead>
-              <TableHead className="">Hantera</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {teamsQuery.map((team) => {
-              return (
-                <TableRow key={team.id}>
-                  <TableCell className="w-fit">
-                    <TeamColorCircle
-                      mainColor={team.mainColor}
-                      secondaryColor={team.secondaryColor}
+    <Card className="w-fit p-10 max-[350px]:p-5">
+      <Table>
+        {/*<TableCaption>A list of your recent invoices.</TableCaption>*/}
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[20px]"></TableHead>
+            <TableHead className="w-[100px]">Lagnamn</TableHead>
+            <TableHead className="">Hantera</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {teamsQuery.map((team) => {
+            return (
+              <TableRow key={team.id}>
+                <TableCell className="w-fit">
+                  <TeamColorCircle
+                    mainColor={team.mainColor}
+                    secondaryColor={team.secondaryColor}
+                  />
+                </TableCell>
+                <TableCell className="font-medium">{team.teamName}</TableCell>
+                <TableCell className={"font-bold opacity-70"}>
+                  <form action={formAction}>
+                    <Input
+                      type="hidden"
+                      name="id"
+                      id="id"
+                      defaultValue={team.id}
                     />
-                  </TableCell>
-                  <TableCell className="font-medium">{team.teamName}</TableCell>
-                  <TableCell className={"font-bold opacity-70"}>
-                    <form action={formAction}>
-                      <Input
-                        type="hidden"
-                        name="id"
-                        id="id"
-                        defaultValue={team.id}
-                      />
-                      <Button className="bg-red-600">Ta bort</Button>
-                    </form>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Card>
-    </div>
+                    <Button className="bg-red-600">Ta bort</Button>
+                  </form>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </Card>
   );
 }

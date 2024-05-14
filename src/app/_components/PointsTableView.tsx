@@ -9,6 +9,15 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import TeamColorCircle from "~/components/TeamColorCircle";
+import sv from "javascript-time-ago/locale/sv";
+import TimeAgo from "javascript-time-ago";
+import { TimerIcon } from "@radix-ui/react-icons";
+import { Button } from "~/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
 
 export default function PointsTableView({
   pointRows,
@@ -23,9 +32,11 @@ export default function PointsTableView({
     teamSecondaryColor: string;
   }[];
 }) {
+  TimeAgo.addLocale(sv);
+  const timeAgo = new TimeAgo("sv");
   return (
     <div className="w-fit">
-      <Card className="w-screen max-w-[900px] p-10 max-[350px]:p-5">
+      <Card className="w-screen max-w-[900px] p-10 max-[400px]:p-2">
         <Table>
           {/*<TableCaption>A list of your recent invoices.</TableCaption>*/}
           <TableHeader>
@@ -53,19 +64,34 @@ export default function PointsTableView({
                     />
                   </TableCell>
                   <TableCell className="font-medium">
-                    {pointRow.username}
+                    <div className="max-[500px]:max-w-[80px] max-[500px]:overflow-hidden max-[500px]:text-ellipsis max-[500px]:whitespace-nowrap">
+                      {pointRow.username}
+                    </div>
                   </TableCell>
                   <TableCell className={"font-bold opacity-70"}>
-                    {pointRow.teamname}
+                    <div className="max-[500px]:max-w-[80px] max-[500px]:overflow-hidden max-[500px]:text-ellipsis max-[500px]:whitespace-nowrap">
+                      {pointRow.teamname}
+                    </div>
                   </TableCell>
                   <TableCell>{pointRow.couponWorth}</TableCell>
                   <TableCell className="text-right max-[400px]:hidden">
-                    {pointRow.addedAt?.toDateString()}
+                    {timeAgo.format(
+                      pointRow.addedAt ? pointRow.addedAt : new Date(),
+                    )}
                   </TableCell>
                   <TableCell className="text-right min-[400px]:hidden">
-                    {pointRow.addedAt?.getDate() +
-                      "/" +
-                      (pointRow.addedAt!.getMonth() + 1)}
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button className="rounded-3xl bg-blue-600 p-2 font-bold shadow-inner">
+                          <TimerIcon height={20} width={20} />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-fit text-xs">
+                        {timeAgo.format(
+                          pointRow.addedAt ? pointRow.addedAt : new Date(),
+                        )}
+                      </PopoverContent>
+                    </Popover>
                   </TableCell>
                 </TableRow>
               );
