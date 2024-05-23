@@ -15,11 +15,10 @@ export async function POST(request: NextRequest) {
     "svix-timestamp": request.headers.get("svix-timestamp")!,
     "svix-signature": request.headers.get("svix-signature")!,
   };
-  const payload = await request.text();
   const wh = new Webhook(secret);
 
   try {
-    const verifyPayload = wh.verify(payload, headers);
+    const verifyPayload = wh.verify(JSON.stringify(data), headers);
     console.log(verifyPayload);
   } catch (e) {
     return new NextResponse("signature error", {
