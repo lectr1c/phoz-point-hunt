@@ -1,15 +1,13 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { eq, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import {
   boolean,
   date,
   index,
   integer,
   pgEnum,
-  pgMaterializedView,
-  pgTable,
   pgTableCreator,
   pgView,
   serial,
@@ -17,7 +15,6 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-import * as querystring from "node:querystring";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same

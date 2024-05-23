@@ -1,14 +1,7 @@
 import { Button } from "~/components/ui/button";
 import DialogParent from "~/components/DialogParent";
-import {
-  deleteUser,
-  changeUserRole,
-} from "~/app/dashboard/_forms/UserController";
-import {
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-} from "~/components/ui/dropdown-menu";
-import { toast } from "~/components/ui/use-toast";
+import { deleteUser } from "~/app/dashboard/_forms/UserController";
+import { DropdownMenuSeparator } from "~/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import type { TTeam, TUser } from "~/server/types";
 import ChangeRoleButtons from "~/app/dashboard/_components/ChangeRoleButtons";
@@ -28,7 +21,7 @@ export default function UserActionsForm({
   //   description: state.description,
   // });
 
-  const router = useRouter();
+  // const router = useRouter();
 
   return (
     <>

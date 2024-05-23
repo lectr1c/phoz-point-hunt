@@ -3,19 +3,14 @@ import { Card } from "~/components/ui/card";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { db } from "~/server/db";
-import { eq } from "drizzle-orm";
-import { teams, users } from "~/server/db/schema";
 import { Button } from "~/components/ui/button";
 import { useToast } from "~/components/ui/use-toast";
 import { useFormState } from "react-dom";
-import registerPoints from "~/app/reg-points/_registerPointsAction";
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
 import DeleteTeamAction from "~/app/dashboard/_components/DeleteTeamAction";
@@ -51,7 +46,7 @@ export default function TeamTableList({
     if (state.success) {
       redirect("/");
     }
-  }, [state]);
+  }, [state, toast]);
 
   //TODO: Update view to remove row on delete
 

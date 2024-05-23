@@ -1,8 +1,7 @@
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,

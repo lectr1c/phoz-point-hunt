@@ -1,4 +1,4 @@
-import { auth, currentUser, getAuth } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import GeneratePDF from "~/app/dashboard/_components/GeneratePDF";
 import CreateCoupons from "~/app/dashboard/_components/CreateCoupons";

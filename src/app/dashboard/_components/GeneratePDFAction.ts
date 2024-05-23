@@ -1,22 +1,14 @@
 "use server";
 import QRCode from "qrcode";
-import { drive_v3, google } from "googleapis";
+import { type drive_v3, google } from "googleapis";
 import { PDFDocument } from "pdf-lib";
 import { db } from "~/server/db";
-import { and, eq, inArray, isNull, sql, SQL } from "drizzle-orm";
+import { and, eq, inArray, isNull } from "drizzle-orm";
 import { coupons, coupons as dbCoupons, points } from "~/server/db/schema";
 import stream from "stream";
 import { DOMParser } from "xmldom";
 
-export default async function GeneratePDFAction(
-  prevState: {
-    title: string;
-    description: string;
-    success: boolean;
-    downloadLink?: string | null;
-  },
-  formData: FormData,
-) {
+export default async function GeneratePDFAction() {
   const couponsDB = await db
     .select({
       id: coupons.id,

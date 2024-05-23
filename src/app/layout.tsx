@@ -1,9 +1,9 @@
 import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
-import {ClerkProvider, SignedIn, SignedOut, SignInButton, UserButton} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import SignButton from "~/app/_components/SignButton";
-import {Toaster} from "~/components/ui/toaster";
+import { Toaster } from "~/components/ui/toaster";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,14 +22,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-      <ClerkProvider>
-        <html lang="en">
+    <ClerkProvider>
+      <html lang="en">
         <body className={`font-sans ${inter.variable}`}>
-        <SignButton/>
-        <Toaster />
-        {children}
+          <SignButton />
+          <Toaster />
+          {children}
         </body>
-        </html>
-      </ClerkProvider>
+      </html>
+    </ClerkProvider>
   );
 }

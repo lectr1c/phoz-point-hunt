@@ -12,7 +12,6 @@ import { useFormState, useFormStatus } from "react-dom";
 import GeneratePDFAction from "~/app/dashboard/_components/GeneratePDFAction";
 import { useEffect } from "react";
 import { useToast } from "~/components/ui/use-toast";
-import { TCoupon } from "~/server/types";
 
 export default function GeneratePDF({
   unExportedCoupons,
@@ -34,7 +33,7 @@ export default function GeneratePDF({
       title: state.title,
       description: state.description,
     });
-  }, [state]);
+  }, [state, toast]);
 
   return (
     <Card className="w-fit">

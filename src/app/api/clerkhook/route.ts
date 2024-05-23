@@ -3,6 +3,7 @@ import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { Webhook } from "svix";
+import * as console from "node:console";
 
 export async function POST(request: NextRequest) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -19,6 +20,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const verifyPayload = wh.verify(payload, headers);
+    console.log(verifyPayload);
   } catch (e) {
     return new NextResponse("signature error", {
       status: 500,

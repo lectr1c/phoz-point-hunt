@@ -36,7 +36,7 @@ export default function CreateTeam() {
       title: state.title,
       description: state.description,
     });
-  }, [state]);
+  }, [state, toast]);
 
   const [mainColor, setMainColor] = useState("#F00");
   const [secondaryColor, setSecondaryColor] = useState("#00F");

@@ -1,4 +1,3 @@
-import { Component } from "react";
 import { changeUserRole } from "~/app/dashboard/_forms/UserController";
 import { toast } from "~/components/ui/use-toast";
 import { Button } from "~/components/ui/button";

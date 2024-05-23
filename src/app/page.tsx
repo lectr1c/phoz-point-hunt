@@ -7,7 +7,7 @@ import {
   teams,
   users,
 } from "~/server/db/schema";
-import { and, asc, desc, eq, gt, gte } from "drizzle-orm";
+import { asc, desc, eq, gt } from "drizzle-orm";
 import { Card } from "~/components/ui/card";
 import LineChart from "~/app/_components/LineChart";
 import * as console from "node:console";

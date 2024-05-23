@@ -1,11 +1,5 @@
 "use client";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { useFormState, useFormStatus } from "react-dom";
 import CreateCouponsAction from "~/app/dashboard/_components/CreateCouponsAction";
@@ -30,7 +24,7 @@ export default function CreateCoupons() {
       title: state.title,
       description: state.description,
     });
-  }, [state]);
+  }, [state, toast]);
 
   return (
     <Card className="w-fit">

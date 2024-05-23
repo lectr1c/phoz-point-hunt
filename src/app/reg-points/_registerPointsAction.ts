@@ -9,7 +9,6 @@ import {
   users,
 } from "~/server/db/schema";
 import { currentUser } from "@clerk/nextjs/server";
-import * as console from "node:console";
 
 export default async function registerPoints(
   prevState: { title: string; description: string; success: boolean },
@@ -93,8 +92,6 @@ export default async function registerPoints(
     couponId: coupon.id,
     userId: user.id,
   });
-
-  const todayDateString = new Date().toDateString();
 
   const date = new Date();
   date.setHours(0, 0, 0, 0);
