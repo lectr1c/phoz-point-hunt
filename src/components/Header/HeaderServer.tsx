@@ -16,7 +16,7 @@ export async function HeaderServer({
     const e = await db.query.users.findFirst({
       where: eq(users.id, user.id),
     });
-    if (e && e.role) {
+    if (e?.role) {
       role = e.role;
     }
   }
