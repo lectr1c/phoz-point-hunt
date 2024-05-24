@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import SignButton from "~/app/_components/SignButton";
 import { Toaster } from "~/components/ui/toaster";
+import { HeaderServer } from "~/components/Header/HeaderServer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,8 +26,10 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`font-sans ${inter.variable}`}>
-          <SignButton />
-          <Toaster />
+          <HeaderServer>
+            <SignButton />
+            <Toaster />
+          </HeaderServer>
           {children}
         </body>
       </html>
