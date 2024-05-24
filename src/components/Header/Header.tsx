@@ -1,6 +1,7 @@
 "use client";
-import { CSSProperties } from "react";
+import { useState } from "react";
 import { pages } from "./Pages";
+import { Hamburger } from "./assets/Hamburger";
 
 export function Header({
   children,
@@ -9,37 +10,35 @@ export function Header({
   children: React.ReactNode;
   role: string;
 }) {
-  const headerStyles: CSSProperties = {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    maxWidth: "1000px",
-    margin: "auto",
-    padding: "1rem",
-    backgroundColor: "#333",
-    color: "#fff",
-    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-    borderRadius: "0 0 0.5rem 0.5rem",
-  };
-
-  const navStyles: CSSProperties = {
-    display: "flex",
-    alignItems: "center",
-  };
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header style={headerStyles}>
-      <div>{children}</div>
-      <nav style={navStyles}>
-        {pages.map(
-          (page, index) =>
-            page.isMenu &&
-            (!page.roles || page.roles.includes(role)) && (
-              <NavLink key={index} href={page.path}>
-                {page.label}
-              </NavLink>
-            ),
-        )}
+    <header className="sticky top-0 z-50 mx-auto flex max-w-4xl flex-row items-center rounded-b-md bg-gray-800 p-4 text-white shadow-md">
+      <div className="flex-1">{children}</div>
+      <button
+        className="ml-auto p-2 lg:hidden"
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        <Hamburger isOpen={menuOpen} />
+      </button>
+      <nav
+        className={`${
+          menuOpen ? "max-h-96" : "max-h-0"
+        } transition-max-height overflow-hidden duration-500 ease-in-out lg:ml-auto lg:flex lg:max-h-none lg:items-center`}
+      >
+        <div
+          className={`${menuOpen ? "block" : "hidden"} lg:flex lg:items-center`}
+        >
+          {pages.map(
+            (page, index) =>
+              page.isMenu &&
+              (!page.roles || page.roles.includes(role)) && (
+                <NavLink key={index} href={page.path}>
+                  {page.label}
+                </NavLink>
+              ),
+          )}
+        </div>
       </nav>
     </header>
   );
@@ -52,16 +51,11 @@ function NavLink({
   href: string;
   children: React.ReactNode;
 }) {
-  const navLinkStyles: CSSProperties = {
-    textDecoration: "none",
-    color: "#fff",
-    margin: "0 0.5rem",
-    padding: "0.5rem",
-    borderRadius: "0.25rem",
-    transition: "background-color 0.3s ease",
-  };
   return (
-    <a href={href} style={navLinkStyles}>
+    <a
+      href={href}
+      className="mx-2 block rounded p-2 text-white transition-colors duration-300 hover:bg-gray-700 lg:inline-block"
+    >
       {children}
     </a>
   );
