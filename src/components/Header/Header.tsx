@@ -34,9 +34,10 @@ export function Header({
         {pages.map(
           (page, index) =>
             page.isMenu &&
-            (!page.roles ||
-              page.roles.includes(role)) && (
-              <NavLink key={index} href={page.path}>{page.label}</NavLink>
+            (!page.roles || page.roles.includes(role)) && (
+              <NavLink key={index} href={page.path}>
+                {page.label}
+              </NavLink>
             ),
         )}
       </nav>
@@ -60,7 +61,7 @@ function NavLink({
     transition: "background-color 0.3s ease",
   };
   return (
-    <a href={href} style={navLinkStyles} >
+    <a href={href} style={navLinkStyles}>
       {children}
     </a>
   );
