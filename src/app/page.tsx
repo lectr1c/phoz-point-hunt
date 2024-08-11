@@ -86,7 +86,7 @@ export default async function HomePage() {
       },
       title: {
         display: true,
-        text: "Chart.js Line Chart",
+        text: "Phöz-poängjakt",
       },
     },
   };
