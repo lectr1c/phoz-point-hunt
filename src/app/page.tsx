@@ -11,6 +11,8 @@ import { asc, desc, eq, gt } from "drizzle-orm";
 import { Card } from "~/components/ui/card";
 import LineChart from "~/app/_components/LineChart";
 import * as console from "node:console";
+import Image from "next/image";
+import TeamColorCircle from "~/components/TeamColorCircle";
 
 export default async function HomePage() {
   const query = await db
@@ -94,11 +96,53 @@ export default async function HomePage() {
     datasets: datasets,
   };
 
+  const teamlist = datasets
+    .map((value) => {
+      return {
+        teamName: value.label,
+        totalPoints: value.data[value.data.length - 1],
+        backgroundColor: value.backgroundColor,
+        borderColor: value.borderColor,
+      };
+    })
+    .sort((a, b) => {
+      if (!a.totalPoints) return -1;
+      if (!b.totalPoints) return 1;
+
+      return a.totalPoints < b?.totalPoints ? 1 : -1;
+    });
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
-      <PointsTableView pointRows={query} />
-
-      <Card className="w-screen max-w-[900px] p-10">
+      <div className="mt-10 flex w-screen max-w-[1100px] flex-wrap items-center justify-center">
+        <Image
+          src="/heroes.png"
+          height={374}
+          width={525}
+          alt={"Superheroes"}
+        ></Image>
+        <div>
+          {teamlist.map((value) => {
+            return (
+              <div
+                key={value.teamName}
+                className="m-2 flex w-[100%] min-w-[400px] max-w-[525px] flex-nowrap items-center justify-between bg-neutral-300 px-10 py-3 font-bold"
+              >
+                <TeamColorCircle
+                  mainColor={value.backgroundColor}
+                  secondaryColor={value.borderColor}
+                />
+                <span>{value.teamName}</span>
+                <span>{value.totalPoints}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className="mt-10 w-screen max-w-[1100px]">
+        <PointsTableView pointRows={query} />
+      </div>
+      <Card className=" my-10 w-screen max-w-[1100px] p-10">
         <LineChart options={options} data={data} />
       </Card>
     </main>

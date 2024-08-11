@@ -21,6 +21,7 @@ import {
   SignInButton,
   SignOutButton,
 } from "@clerk/nextjs";
+import { Checkbox } from "~/components/ui/checkbox";
 
 export default function RegisterPointsForm({
   params,
@@ -70,9 +71,19 @@ export default function RegisterPointsForm({
               defaultValue={params.id}
               required
             />
-            <SignedIn>
-              <SubmitButton />
-            </SignedIn>
+            <div className="flex items-center space-x-2">
+              <Checkbox id="anonymous" name="anonymous" />
+              <div className="grid gap-1.5 leading-none">
+                <label
+                  htmlFor="anonymous"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Registrera poäng anonymt
+                </label>
+              </div>
+            </div>
+
+            <SubmitButton />
           </form>
           <SignedOut>
             <SignInButton>
@@ -87,7 +98,7 @@ export default function RegisterPointsForm({
               <Button className="mt-3 w-full">Sign Out</Button>
             </SignOutButton>
           </SignedIn>
-          <SignedOut>Du behöver logga in innan du lägger poäng</SignedOut>
+          <SignedOut>Du kan logga in eller registrera poäng anonymt.</SignedOut>
         </CardFooter>
       </Card>
     </div>

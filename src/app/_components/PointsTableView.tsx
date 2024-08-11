@@ -34,20 +34,20 @@ export default function PointsTableView({
   TimeAgo.addLocale(sv);
   const timeAgo = new TimeAgo("sv");
   return (
-    <div className="w-fit">
-      <Card className="w-screen max-w-[900px] p-10 max-[400px]:p-2">
+    <div className="w-full">
+      <Card className="p-10 max-[600px]:p-2">
         <Table>
           {/*<TableCaption>A list of your recent invoices.</TableCaption>*/}
           <TableHeader>
             <TableRow>
               <TableHead className="w-[20px]"></TableHead>
-              <TableHead className="w-[100px]">NØllan</TableHead>
+              <TableHead className="w-[60px]">NØllan</TableHead>
               <TableHead>Lag</TableHead>
               <TableHead className="px-0">Poäng</TableHead>
-              <TableHead className="text-right max-[400px]:hidden">
+              <TableHead className="text-right max-[600px]:hidden">
                 Registrerad
               </TableHead>
-              <TableHead className="text-right min-[400px]:hidden">
+              <TableHead className="text-right min-[600px]:hidden">
                 Reg.
               </TableHead>
             </TableRow>
@@ -63,22 +63,22 @@ export default function PointsTableView({
                     />
                   </TableCell>
                   <TableCell className="font-medium">
-                    <div className="max-[500px]:max-w-[80px] max-[500px]:overflow-hidden max-[500px]:text-ellipsis max-[500px]:whitespace-nowrap">
+                    <div className="max-[500px]:max-w-[60px] max-[500px]:overflow-hidden max-[500px]:text-ellipsis max-[500px]:whitespace-nowrap">
                       {pointRow.username}
                     </div>
                   </TableCell>
                   <TableCell className={"font-bold opacity-70"}>
-                    <div className="max-[500px]:max-w-[80px] max-[500px]:overflow-hidden max-[500px]:text-ellipsis max-[500px]:whitespace-nowrap">
+                    <div className="max-[500px]:max-w-[160px] max-[500px]:overflow-hidden max-[500px]:text-ellipsis max-[500px]:whitespace-nowrap max-[500px]:text-sm">
                       {pointRow.teamname}
                     </div>
                   </TableCell>
                   <TableCell>{pointRow.couponWorth}</TableCell>
-                  <TableCell className="text-right max-[400px]:hidden">
+                  <TableCell className="text-right max-[600px]:hidden">
                     {timeAgo.format(
                       pointRow.addedAt ? pointRow.addedAt : new Date(),
                     )}
                   </TableCell>
-                  <TableCell className="text-right min-[400px]:hidden">
+                  <TableCell className="text-right min-[600px]:hidden">
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button className="rounded-3xl bg-blue-600 p-2 font-bold shadow-inner">

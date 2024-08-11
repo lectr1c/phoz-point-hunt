@@ -13,13 +13,11 @@ export function Header({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    maxWidth: "1000px",
     margin: "auto",
     padding: "1rem",
-    backgroundColor: "#333",
-    color: "#fff",
+    backgroundColor: "rgba(51,51,51,0.31)",
+    color: "#000000",
     boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-    borderRadius: "0 0 0.5rem 0.5rem",
   };
 
   const navStyles: CSSProperties = {
@@ -54,14 +52,18 @@ function NavLink({
 }) {
   const navLinkStyles: CSSProperties = {
     textDecoration: "none",
-    color: "#fff",
+    color: "#000000",
     margin: "0 0.5rem",
-    padding: "0.5rem",
+    padding: "0.5rem 1rem",
     borderRadius: "0.25rem",
     transition: "background-color 0.3s ease",
   };
   return (
-    <a href={href} style={navLinkStyles}>
+    <a
+      href={href}
+      style={navLinkStyles}
+      className="bg-amber-500 hover:bg-amber-400"
+    >
       {children}
     </a>
   );
