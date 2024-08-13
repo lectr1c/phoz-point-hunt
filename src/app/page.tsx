@@ -13,6 +13,7 @@ import LineChart from "~/app/_components/LineChart";
 import * as console from "node:console";
 import Image from "next/image";
 import TeamColorCircle from "~/components/TeamColorCircle";
+import NewsFeed from "~/app/_components/NewsFeed";
 
 export default async function HomePage() {
   const query = await db
@@ -85,7 +86,7 @@ export default async function HomePage() {
         position: "top" as const,
       },
       title: {
-        display: true,
+        display: false,
         text: "Phöz-poängjakt",
       },
     },
@@ -140,9 +141,15 @@ export default async function HomePage() {
         </div>
       </div>
       <div className="mt-10 w-screen max-w-[1100px]">
+        <NewsFeed />
+      </div>
+      <div className="mt-10 w-screen max-w-[1100px]">
         <PointsTableView pointRows={query} />
       </div>
       <Card className=" my-10 w-screen max-w-[1100px] p-10">
+        <div className="flex justify-center text-3xl underline">
+          Poänghistorik
+        </div>
         <LineChart options={options} data={data} />
       </Card>
     </main>

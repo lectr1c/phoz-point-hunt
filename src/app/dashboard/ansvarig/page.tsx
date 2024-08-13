@@ -9,6 +9,7 @@ import { db } from "~/server/db";
 import { coupons, points, teams, users } from "~/server/db/schema";
 import { and, count, eq, isNull } from "drizzle-orm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import CreateNewsPost from "~/app/dashboard/_components/CreateNewsPost";
 
 export default async function AnsvarigDashboard() {
   const user = await currentUser();
@@ -43,8 +44,11 @@ export default async function AnsvarigDashboard() {
   } else {
     return (
       <div className="flex w-screen flex-col items-center justify-center gap-5 align-top">
-        <Tabs defaultValue="manageTeams" className="w-[400px]">
-          <TabsList className={"h-fit"}>
+        <Tabs defaultValue="manageTeams" className="">
+          <TabsList className={"flex h-fit justify-center"}>
+            <TabsTrigger className="max-[463px]:text-wrap" value="nyheter">
+              Nyheter
+            </TabsTrigger>
             <TabsTrigger className="max-[463px]:text-wrap" value="generatePDF">
               Generera PDF
             </TabsTrigger>
@@ -68,6 +72,9 @@ export default async function AnsvarigDashboard() {
                   unExportedCoupons[0] ? unExportedCoupons[0].count : 0
                 }
               />
+            </TabsContent>
+            <TabsContent value="nyheter">
+              <CreateNewsPost />
             </TabsContent>
             <TabsContent value="createCoupons">
               <CreateCoupons />

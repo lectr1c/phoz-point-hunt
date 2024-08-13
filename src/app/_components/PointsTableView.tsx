@@ -36,8 +36,10 @@ export default function PointsTableView({
   return (
     <div className="w-full">
       <Card className="p-10 max-[600px]:p-2">
+        <div className="flex justify-center text-2xl underline">
+          Senaste registrerade poäng
+        </div>
         <Table>
-          {/*<TableCaption>A list of your recent invoices.</TableCaption>*/}
           <TableHeader>
             <TableRow>
               <TableHead className="w-[20px]"></TableHead>
