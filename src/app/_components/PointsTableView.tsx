@@ -43,7 +43,6 @@ export default function PointsTableView({
           <TableHeader>
             <TableRow>
               <TableHead className="w-[20px]"></TableHead>
-              <TableHead className="w-[60px]">NØllan</TableHead>
               <TableHead>Lag</TableHead>
               <TableHead className="px-0">Poäng</TableHead>
               <TableHead className="text-right max-[600px]:hidden">
@@ -63,11 +62,6 @@ export default function PointsTableView({
                       mainColor={pointRow.teamMainColor}
                       secondaryColor={pointRow.teamSecondaryColor}
                     />
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    <div className="max-[500px]:max-w-[60px] max-[500px]:overflow-hidden max-[500px]:text-ellipsis max-[500px]:whitespace-nowrap">
-                      {pointRow.username}
-                    </div>
                   </TableCell>
                   <TableCell className={"font-bold opacity-70"}>
                     <div className="max-[500px]:max-w-[160px] max-[500px]:overflow-hidden max-[500px]:text-ellipsis max-[500px]:whitespace-nowrap max-[500px]:text-sm">

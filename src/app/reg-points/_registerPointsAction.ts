@@ -19,35 +19,7 @@ export default async function registerPoints(
     teamId: formData.get("team") as unknown as number,
     username: formData.get("username") as string,
     userId: formData.get("userId") as string,
-    anonymous: formData.get("anonymous") as unknown as boolean,
   };
-
-  if (rawFormData.anonymous) console.log("ANONYMOUS");
-
-  if (
-    rawFormData.teamId != null &&
-    rawFormData.username != null &&
-    rawFormData.anonymous != null
-  ) {
-    await db.insert(users).values({
-      id: rawFormData.userId,
-      teamId: rawFormData.teamId,
-      username: rawFormData.username,
-    });
-  }
-
-  if (
-    rawFormData.teamId != null &&
-    rawFormData.username == null &&
-    rawFormData.anonymous != null
-  ) {
-    await db
-      .update(users)
-      .set({
-        teamId: rawFormData.teamId,
-      })
-      .where(eq(users.id, rawFormData.userId));
-  }
 
   if (rawFormData.coupon == null)
     return {
@@ -77,71 +49,23 @@ export default async function registerPoints(
       success: false,
     };
 
-  if (!rawFormData.anonymous) {
-    const user = await currentUser();
-    if (!user)
-      return {
-        title: "Fel inträffat",
-        description: "Du är inte inloggad",
-        success: false,
-      };
+  const anonUser = await db.query.users.findFirst({
+    where: and(
+      eq(users.teamId, rawFormData.teamId),
+      eq(users.username, "Anonymt"),
+    ),
+  });
 
-    const dbUserTeams = await db
-      .select()
-      .from(users)
-      .innerJoin(teams, eq(users.teamId, teams.id))
-      .where(eq(users.id, user.id));
-    if (!dbUserTeams[0])
-      return {
-        title: "Fel Inträffat",
-        description: "Du är inte med i nån lag",
-        success: false,
-      };
-
-    const dbUserTeam = dbUserTeams[0];
-
+  if (anonUser) {
     await db.insert(points).values({
       couponId: coupon.id,
-      userId: user.id,
+      userId: anonUser.id,
     });
-
-    const date = new Date();
-    date.setHours(0, 0, 0, 0);
-    const newPoints = await db
-      .select()
-      .from(pointsByDateView)
-      .where(
-        and(
-          gte(pointsByDateView.viewDate, date.toDateString()),
-          eq(pointsByDateView.teamId, dbUserTeam.teams.id),
-        ),
-      )
-      .orderBy(desc(pointsByDateView.viewDate));
-
-    return {
-      title: `${coupon.couponWorth} Poäng Registrerades!`,
-      description: `Ditt lag ${dbUserTeam.teams.teamName} har ${newPoints[0]!.totalPointsByDate} poäng!`,
-      success: true,
-    };
-  } else {
-    const anonUser = await db.query.users.findFirst({
-      where: and(
-        eq(users.teamId, rawFormData.teamId),
-        eq(users.username, "Anonymt"),
-      ),
-    });
-
-    if (anonUser) {
-      await db.insert(points).values({
-        couponId: coupon.id,
-        userId: anonUser.id,
-      });
-    }
-
-    return {
-      title: `${coupon.couponWorth} Poäng Registrerades!`,
-      description: `Grattis! Poäng var anonyma.`,
-      success: true,
-    };
   }
+
+  return {
+    title: `${coupon.couponWorth} Poäng Registrerades!`,
+    description: `Grattis!`,
+    success: true,
+  };
 }

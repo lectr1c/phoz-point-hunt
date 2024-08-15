@@ -71,35 +71,10 @@ export default function RegisterPointsForm({
               defaultValue={params.id}
               required
             />
-            <div className="flex items-center space-x-2">
-              <Checkbox id="anonymous" name="anonymous" />
-              <div className="grid gap-1.5 leading-none">
-                <label
-                  htmlFor="anonymous"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Registrera poäng anonymt
-                </label>
-              </div>
-            </div>
-
             <SubmitButton />
           </form>
-          <SignedOut>
-            <SignInButton>
-              <Button className="mt-3 w-full">Sign In</Button>
-            </SignInButton>
-          </SignedOut>
         </CardContent>
-        <CardFooter>
-          <SignedIn>
-            Koden kan användas bara en gång!
-            <SignOutButton>
-              <Button className="mt-3 w-full">Sign Out</Button>
-            </SignOutButton>
-          </SignedIn>
-          <SignedOut>Du kan logga in eller registrera poäng anonymt.</SignedOut>
-        </CardFooter>
+        <CardFooter>Koden kan användas bara en gång!</CardFooter>
       </Card>
     </div>
   );
