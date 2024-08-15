@@ -49,7 +49,7 @@ export const news = createTable("news", {
   id: serial("id").primaryKey(),
   userId: text("user_id").references(() => users.id),
   title: varchar("title", { length: 256 }),
-  text: varchar("text", { length: 256 }),
+  text: varchar("text", { length: 512 }),
   createdAt: timestamp("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

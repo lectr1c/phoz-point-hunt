@@ -29,7 +29,9 @@ export default async function NewsFeed() {
                 {timeAgo.format(newsPosts[0].createdAt)}
               </div>
             </div>
-            <div className="bg-yellow-50 p-2">{newsPosts[0].text}</div>
+            <div className="whitespace-pre-wrap bg-yellow-50 p-2">
+              {newsPosts[0].text}
+            </div>
           </div>
         ) : (
           <></>
@@ -42,7 +44,9 @@ export default async function NewsFeed() {
                 {timeAgo.format(newsPosts[1].createdAt)}
               </div>
             </div>
-            <div className="bg-yellow-50 p-2">{newsPosts[1].text}</div>
+            <div className="whitespace-pre-wrap bg-yellow-50 p-2">
+              {newsPosts[1].text}
+            </div>
           </div>
         ) : (
           <></>
@@ -66,7 +70,9 @@ export default async function NewsFeed() {
                           {timeAgo.format(newsPost.createdAt)}
                         </div>
                       </div>
-                      <div className="bg-yellow-50 p-2">{newsPost.text}</div>
+                      <div className="whitespace-pre-wrap bg-yellow-50 p-2">
+                        {newsPost.text}
+                      </div>
                     </div>
                   );
                 })}

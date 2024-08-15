@@ -121,7 +121,6 @@ export default async function GeneratePDFAction() {
       parents: ["" + process.env.FOLDER_ID],
     },
     supportsTeamDrives: true,
-    fields: "webContentLink",
   });
 
   await db
@@ -138,6 +137,7 @@ export default async function GeneratePDFAction() {
     title: "Fil uppladdat",
     description: "Filen är uppe nu på google drive i Kuponger mappen",
     success: true,
-    downloadLink: res.data.webContentLink,
+    downloadLink:
+      "https://drive.google.com/drive/u/2/folders/0AGkb2ZUX1uaHUk9PVA",
   };
 }
