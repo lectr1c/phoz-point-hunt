@@ -10,6 +10,7 @@ import { coupons, points, teams, users } from "~/server/db/schema";
 import { and, count, eq, isNull } from "drizzle-orm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import CreateNewsPost from "~/app/dashboard/_components/CreateNewsPost";
+import RegisterPointsManually from "~/app/dashboard/_components/RegisterPointsManually";
 
 export default async function AnsvarigDashboard() {
   const user = await currentUser();
@@ -39,6 +40,8 @@ export default async function AnsvarigDashboard() {
     .leftJoin(points, eq(points.couponId, coupons.id))
     .where(and(eq(coupons.exported, false), isNull(points.id)));
 
+  const teamsDB = await db.query.teams.findMany();
+
   if (!canAccess) {
     redirect("/");
   } else {
@@ -61,6 +64,12 @@ export default async function AnsvarigDashboard() {
             <TabsTrigger className="max-[463px]:text-wrap" value="createTeam">
               Skapa Lag
             </TabsTrigger>
+            <TabsTrigger
+              className="max-[463px]:text-wrap"
+              value="registerPointsManual"
+            >
+              Reg. Poäng
+            </TabsTrigger>
             <TabsTrigger className="max-[463px]:text-wrap" value="manageTeams">
               Hantera Lag
             </TabsTrigger>
@@ -75,6 +84,9 @@ export default async function AnsvarigDashboard() {
             </TabsContent>
             <TabsContent value="nyheter">
               <CreateNewsPost />
+            </TabsContent>
+            <TabsContent value="registerPointsManual">
+              <RegisterPointsManually teams={teamsDB} />
             </TabsContent>
             <TabsContent value="createCoupons">
               <CreateCoupons />

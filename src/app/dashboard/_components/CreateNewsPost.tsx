@@ -8,6 +8,7 @@ import { useToast } from "~/components/ui/use-toast";
 import { useEffect } from "react";
 import CreateNewsAction from "~/app/dashboard/_components/CreateNewsAction";
 import { Textarea } from "~/components/ui/textarea";
+import { redirect } from "next/navigation";
 
 export default function CreateNewsPost() {
   const [state, formAction] = useFormState(CreateNewsAction, {
@@ -25,6 +26,10 @@ export default function CreateNewsPost() {
       title: state.title,
       description: state.description,
     });
+
+    if (state.success) {
+      redirect("/");
+    }
   }, [state, toast]);
 
   return (
