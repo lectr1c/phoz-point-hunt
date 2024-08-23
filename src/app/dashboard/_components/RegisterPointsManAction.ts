@@ -13,10 +13,9 @@ export default async function RegisterPointsManAction(
   },
   formData: FormData,
 ) {
-  const { team, couponWorth, addedAt } = {
+  const { team, couponWorth } = {
     team: formData.get("team") as string,
     couponWorth: formData.get("couponWorth") as unknown as number,
-    addedAt: formData.get("date") as unknown as Date,
   };
 
   if (couponWorth === 0)
@@ -56,7 +55,9 @@ export default async function RegisterPointsManAction(
 
   await db
     .insert(points)
-    .values([{ couponId: couponID, userId: anonUser?.id, addedAt: addedAt }]);
+    .values([
+      { couponId: couponID, userId: anonUser?.id, addedAt: new Date() },
+    ]);
 
   return {
     title: "Registrerade poäng",
