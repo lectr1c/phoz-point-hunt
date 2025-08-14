@@ -51,7 +51,7 @@ export default async function GeneratePDFAction() {
 
   couponsDB.map((coupon, index) => {
     QRCode.toString(
-      "https://phöz.com/reg-points/" + coupon.couponCode,
+      "https://phoz-point-hunt.vercel.app/reg-points/" + coupon.couponCode,
       { type: "svg" },
       function (err, string) {
         const xIndex = index % 3;
