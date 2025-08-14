@@ -87,12 +87,6 @@ export default async function GeneratePDFAction() {
           size: 13,
         });
 
-        page.drawText("https://phöz.com/reg-points/" + coupon.couponCode, {
-          x: x + 5,
-          y: y + 5,
-          size: 9,
-        });
-
         if (dAttribute != null) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
           page.drawSvgPath(dAttribute, {
