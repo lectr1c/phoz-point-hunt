@@ -19,7 +19,7 @@ export const pages: Page[] = [
   },
   {
     path: "/reg-points",
-    label: "Registrera poäng",
+    label: "➕",
     isMenu: true,
   },
 ];
