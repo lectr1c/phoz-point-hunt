@@ -1,16 +1,16 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import GeneratePDF from "~/app/dashboard/_components/GeneratePDF";
-import CreateCoupons from "~/app/dashboard/_components/CreateCoupons";
-import CreateTeam from "~/app/dashboard/_components/CreateTeam";
-import UserTableList from "~/app/dashboard/_components/UserTableList";
-import TeamTableList from "~/app/dashboard/_components/TeamTableList";
-import { db } from "~/server/db";
-import { coupons, points, teams, users } from "~/server/db/schema";
+import GeneratePDF from "~/features/dashboard/components/GeneratePDF";
+import CreateCoupons from "~/features/dashboard/components/CreateCoupons";
+import CreateTeam from "~/features/dashboard/components/CreateTeam";
+import UserTableList from "~/features/dashboard/components/UserTableList";
+import TeamTableList from "~/features/dashboard/components/TeamTableList";
+import { db } from "~/lib/db";
+import { coupons, points, teams, users } from "~/lib/db/schema";
 import { and, count, eq, isNull } from "drizzle-orm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import CreateNewsPost from "~/app/dashboard/_components/CreateNewsPost";
-import RegisterPointsManually from "~/app/dashboard/_components/RegisterPointsManually";
+import CreateNewsPost from "~/features/dashboard/components/CreateNewsPost";
+import RegisterPointsManually from "~/features/dashboard/components/RegisterPointsManually";
 
 export default async function AnsvarigDashboard() {
   const user = await currentUser();

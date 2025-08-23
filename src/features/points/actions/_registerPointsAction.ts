@@ -1,5 +1,5 @@
 "use server";
-import { db } from "~/server/db";
+import { db } from "~/lib/db";
 import { and, desc, eq, gte } from "drizzle-orm";
 import {
   coupons,
@@ -7,7 +7,7 @@ import {
   pointsByDateView,
   teams,
   users,
-} from "~/server/db/schema";
+} from "~/lib/db/schema";
 import { currentUser } from "@clerk/nextjs/server";
 
 export default async function registerPoints(

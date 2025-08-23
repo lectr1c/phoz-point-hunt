@@ -1,8 +1,8 @@
-import { changeUserRole } from "~/app/dashboard/_forms/UserController";
+import { changeUserRole } from "~/features/dashboard/components/UserController";
 import { toast } from "~/components/ui/use-toast";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/navigation";
-import type { TTeam, TUser } from "~/server/types";
+import type { TTeam, TUser } from "~/types/types";
 
 export default function ChangeRoleButtons({
   user,

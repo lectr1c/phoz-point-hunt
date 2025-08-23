@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import CreateTeamAction from "~/app/dashboard/_components/CreateTeamAction";
+import CreateTeamAction from "~/features/dashboard/actions/CreateTeamAction";
 import { useToast } from "~/components/ui/use-toast";
 import { useEffect, useState } from "react";
 import { Label } from "~/components/ui/label";

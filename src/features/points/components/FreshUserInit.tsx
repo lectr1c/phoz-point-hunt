@@ -8,9 +8,9 @@ import {
 } from "~/components/ui/select";
 import { Input } from "~/components/ui/input";
 import { currentUser } from "@clerk/nextjs/server";
-import { db } from "~/server/db";
+import { db } from "~/lib/db";
 import { eq } from "drizzle-orm";
-import { users } from "~/server/db/schema";
+import { users } from "~/lib/db/schema";
 import { SignedOut } from "@clerk/nextjs";
 
 export default async function FreshUserInit() {

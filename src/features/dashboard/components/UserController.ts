@@ -1,8 +1,8 @@
 "use server";
 
-import { db } from "~/server/db";
+import { db } from "~/lib/db";
 import { eq } from "drizzle-orm";
-import { coupons, points, users } from "~/server/db/schema";
+import { coupons, points, users } from "~/lib/db/schema";
 import { currentUser } from "@clerk/nextjs/server";
 
 export async function deleteUser(id: string) {

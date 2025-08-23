@@ -8,9 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import TeamColorCircle from "~/components/TeamColorCircle";
-import DropDownButton from "~/components/DropDownButton";
-import UserActionsForm from "~/app/dashboard/_forms/UserActionsForm";
+import TeamColorCircle from "~/components/common/TeamColorCircle";
+import DropDownButton from "~/components/common/DropDownButton";
+import UserActionsForm from "~/features/dashboard/components/UserActionsForm";
 
 export default function UserTableList({
   usersQuery,

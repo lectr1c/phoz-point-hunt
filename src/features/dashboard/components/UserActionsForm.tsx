@@ -1,10 +1,10 @@
 import { Button } from "~/components/ui/button";
-import DialogParent from "~/components/DialogParent";
-import { deleteUser } from "~/app/dashboard/_forms/UserController";
+import DialogParent from "~/components/common/DialogParent";
+import { deleteUser } from "~/features/dashboard/components/UserController";
 import { DropdownMenuSeparator } from "~/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
-import type { TTeam, TUser } from "~/server/types";
-import ChangeRoleButtons from "~/app/dashboard/_components/ChangeRoleButtons";
+import type { TTeam, TUser } from "~/types/types";
+import ChangeRoleButtons from "~/features/dashboard/components/ChangeRoleButtons";
 
 export default function UserActionsForm({
   user,

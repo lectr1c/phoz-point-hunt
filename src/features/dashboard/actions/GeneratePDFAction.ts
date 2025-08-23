@@ -2,9 +2,9 @@
 import QRCode from "qrcode";
 import { type drive_v3, google } from "googleapis";
 import { PDFDocument } from "pdf-lib";
-import { db } from "~/server/db";
+import { db } from "~/lib/db";
 import { and, eq, inArray, isNull } from "drizzle-orm";
-import { coupons, coupons as dbCoupons, points } from "~/server/db/schema";
+import { coupons, coupons as dbCoupons, points } from "~/lib/db/schema";
 import stream from "stream";
 import { DOMParser } from "xmldom";
 

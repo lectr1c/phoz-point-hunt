@@ -3,7 +3,7 @@
 import { useFormState, useFormStatus } from "react-dom";
 import { useToast } from "~/components/ui/use-toast";
 import { useEffect, useState } from "react";
-import type { TTeam } from "~/server/types";
+import type { TTeam } from "~/types/types";
 import { Label } from "~/components/ui/label";
 import {
   Select,
@@ -14,7 +14,7 @@ import {
 } from "~/components/ui/select";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
-import RegisterPointsManAction from "~/app/dashboard/_components/RegisterPointsManAction";
+import RegisterPointsManAction from "~/features/dashboard/actions/RegisterPointsManAction";
 import { Card } from "~/components/ui/card";
 import { redirect } from "next/navigation";
 

@@ -1,7 +1,7 @@
 "use server";
 
-import { db } from "~/server/db";
-import { coupons, points, users } from "~/server/db/schema";
+import { db } from "~/lib/db";
+import { coupons, points, users } from "~/lib/db/schema";
 import ShortUniqueId from "short-unique-id";
 import { and, eq } from "drizzle-orm";
 

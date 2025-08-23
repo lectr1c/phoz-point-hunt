@@ -13,9 +13,9 @@ import { useToast } from "~/components/ui/use-toast";
 import { useFormState } from "react-dom";
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
-import DeleteTeamAction from "~/app/dashboard/_components/DeleteTeamAction";
+import DeleteTeamAction from "~/features/dashboard/actions/DeleteTeamAction";
 import { Input } from "~/components/ui/input";
-import TeamColorCircle from "~/components/TeamColorCircle";
+import TeamColorCircle from "~/components/common/TeamColorCircle";
 
 export default function TeamTableList({
   teamsQuery,

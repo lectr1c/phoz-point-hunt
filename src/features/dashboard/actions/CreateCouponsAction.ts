@@ -1,7 +1,7 @@
 'use server'
 
-import {db} from "~/server/db";
-import { coupons } from "~/server/db/schema";
+import {db} from "~/lib/db";
+import { coupons } from "~/lib/db/schema";
 import ShortUniqueId from "short-unique-id";
 
 export default async function CreateCouponsAction(prevState: {title: string, description: string, success: boolean}, formData: FormData) {

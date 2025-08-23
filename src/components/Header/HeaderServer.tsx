@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
-import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
+import { db } from "~/lib/db";
+import { users } from "~/lib/db/schema";
 import { eq } from "drizzle-orm";
 import Header from "./Header";
 

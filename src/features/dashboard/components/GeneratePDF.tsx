@@ -9,7 +9,7 @@ import {
 } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { useFormState, useFormStatus } from "react-dom";
-import GeneratePDFAction from "~/app/dashboard/_components/GeneratePDFAction";
+import GeneratePDFAction from "~/features/dashboard/actions/GeneratePDFAction";
 import { useEffect } from "react";
 import { useToast } from "~/components/ui/use-toast";
 

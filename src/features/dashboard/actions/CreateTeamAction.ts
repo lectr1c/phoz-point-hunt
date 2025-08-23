@@ -1,6 +1,6 @@
 "use server";
-import { db } from "~/server/db";
-import { teams } from "~/server/db/schema";
+import { db } from "~/lib/db";
+import { teams } from "~/lib/db/schema";
 
 export default async function CreateTeamAction(
   prevState: { title: string; description: string; success: boolean },
@@ -11,8 +11,6 @@ export default async function CreateTeamAction(
     mainColor: formData.get("mainColor") as string,
     secondaryColor: formData.get("secondaryColor") as string,
   };
-
-  console.log(teamName, mainColor, secondaryColor);
 
   await db.insert(teams).values({
     teamName: teamName,

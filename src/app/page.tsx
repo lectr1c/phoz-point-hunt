@@ -1,19 +1,19 @@
-import PointsTableView from "~/app/_components/PointsTableView";
-import { db } from "~/server/db";
+import PointsTableView from "~/components/common/PointsTableView";
+import { db } from "~/lib/db";
 import {
   coupons,
   points,
   pointsByDateView,
   teams,
   users,
-} from "~/server/db/schema";
+} from "~/lib/db/schema";
 import { asc, desc, eq, gt } from "drizzle-orm";
 import { Card } from "~/components/ui/card";
-import LineChart from "~/app/_components/LineChart";
+import LineChart from "~/components/common/LineChart";
 import * as console from "node:console";
 import Image from "next/image";
-import TeamColorCircle from "~/components/TeamColorCircle";
-import NewsFeed from "~/app/_components/NewsFeed";
+import TeamColorCircle from "~/components/common/TeamColorCircle";
+import NewsFeed from "~/components/common/NewsFeed";
 
 export default async function HomePage() {
   const query = await db
@@ -42,8 +42,6 @@ export default async function HomePage() {
     .where(gt(pointsByDateView.viewDate, date.toDateString()))
     .orderBy(asc(pointsByDateView.teamId))
     .innerJoin(teams, eq(pointsByDateView.teamId, teams.id));
-
-  console.log(latestPointsQuery);
 
   const teamsQuery = await db.query.teams.findMany();
 

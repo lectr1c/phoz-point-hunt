@@ -1,7 +1,7 @@
 "use server";
 
-import { db } from "~/server/db";
-import { teams, users } from "~/server/db/schema";
+import { db } from "~/lib/db";
+import { teams, users } from "~/lib/db/schema";
 import { eq } from "drizzle-orm";
 
 export default async function DeleteTeamAction(

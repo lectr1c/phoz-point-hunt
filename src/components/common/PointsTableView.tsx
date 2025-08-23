@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import TeamColorCircle from "~/components/TeamColorCircle";
+import TeamColorCircle from "~/components/common/TeamColorCircle";
 import sv from "javascript-time-ago/locale/sv";
 import TimeAgo from "javascript-time-ago";
 import { TimerIcon } from "@radix-ui/react-icons";

@@ -12,7 +12,7 @@ import {
 } from "~/components/ui/card";
 import { useToast } from "~/components/ui/use-toast";
 import { useFormState, useFormStatus } from "react-dom";
-import registerPoints from "~/app/reg-points/_registerPointsAction";
+import registerPoints from "~/features/points/actions/_registerPointsAction";
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
 import {

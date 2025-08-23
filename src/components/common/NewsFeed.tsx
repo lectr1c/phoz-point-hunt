@@ -1,8 +1,8 @@
 import TimeAgo from "javascript-time-ago";
 import sv from "javascript-time-ago/locale/sv";
 import { Card } from "~/components/ui/card";
-import { db } from "~/server/db";
-import { news } from "~/server/db/schema";
+import { db } from "~/lib/db";
+import { news } from "~/lib/db/schema";
 import { desc } from "drizzle-orm";
 import {
   Accordion,

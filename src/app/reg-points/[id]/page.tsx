@@ -1,9 +1,10 @@
-import RegisterPointsForm from "~/app/reg-points/_components/RegPointsForm";
-import FreshUserInit from "~/app/reg-points/_components/FreshUserInit";
+import RegisterPointsForm from "~/features/points/components/RegPointsForm";
+import FreshUserInit from "~/features/points/components/FreshUserInit";
 
-export default function RegisterPoints({ params } : { params: { id: string } }) {
+export default async function RegisterPoints({ params } : { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
 
   return (
-      <RegisterPointsForm params={params}><FreshUserInit/></RegisterPointsForm>
+      <RegisterPointsForm params={resolvedParams}><FreshUserInit/></RegisterPointsForm>
   );
 }

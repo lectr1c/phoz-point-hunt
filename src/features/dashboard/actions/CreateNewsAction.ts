@@ -1,7 +1,7 @@
 "use server";
 
-import { db } from "~/server/db";
-import { news } from "~/server/db/schema";
+import { db } from "~/lib/db";
+import { news } from "~/lib/db/schema";
 
 export default async function CreateNewsAction(
   prevState: { title: string; description: string; success: boolean },

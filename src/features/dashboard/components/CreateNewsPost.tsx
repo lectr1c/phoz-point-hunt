@@ -2,14 +2,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { useFormState, useFormStatus } from "react-dom";
-import CreateCouponsAction from "~/app/dashboard/_components/CreateCouponsAction";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { useToast } from "~/components/ui/use-toast";
 import { useEffect } from "react";
+import CreateNewsAction from "~/features/dashboard/actions/CreateNewsAction";
+import { Textarea } from "~/components/ui/textarea";
+import { redirect } from "next/navigation";
 
-export default function CreateCoupons() {
-  const [state, formAction] = useFormState(CreateCouponsAction, {
+export default function CreateNewsPost() {
+  const [state, formAction] = useFormState(CreateNewsAction, {
     title: "",
     description: "",
     success: false,
@@ -24,19 +26,26 @@ export default function CreateCoupons() {
       title: state.title,
       description: state.description,
     });
+
+    if (state.success) {
+      redirect("/");
+    }
   }, [state, toast]);
 
   return (
     <Card className="w-fit">
       <CardHeader>
-        <CardTitle>Skapa Kuponger</CardTitle>
+        <CardTitle>Skapa Nyhet</CardTitle>
       </CardHeader>
       <CardContent>
-        <form action={formAction} className="flex h-min flex-col gap-y-2">
-          <Label htmlFor="couponAmt">Mängd</Label>
-          <Input id="couponWorth" type="number" name="couponAmt" required />
-          <Label htmlFor="couponWorth">Värde</Label>
-          <Input id="couponWorth" type="number" name="couponWorth" required />
+        <form
+          action={formAction}
+          className="flex h-min w-[95vw] flex-col gap-y-2 sm:w-[70vw]"
+        >
+          <Label htmlFor="title">Titel</Label>
+          <Input id="title" type="text" name="title" required />
+          <Label htmlFor="Text">Text</Label>
+          <Textarea id="text" name="text" required />
           <SubmitButton />
         </form>
       </CardContent>
@@ -55,7 +64,7 @@ function SubmitButton() {
       }
       type="submit"
     >
-      {pending ? "Genererar..." : "Generera"}
+      {pending ? "Skapar..." : "Skapa"}
     </Button>
   );
 }

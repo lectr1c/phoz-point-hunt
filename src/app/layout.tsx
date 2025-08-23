@@ -1,8 +1,8 @@
-import "~/styles/globals.css";
+import "./globals.css";
 
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import SignButton from "~/app/_components/SignButton";
+import SignButton from "~/components/common/SignButton";
 import { Toaster } from "~/components/ui/toaster";
 import { HeaderServer } from "~/components/Header/HeaderServer";
 
