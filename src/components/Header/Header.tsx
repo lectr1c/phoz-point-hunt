@@ -1,5 +1,5 @@
 "use client";
-import { CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import { pages } from "./Pages";
 
 export function Header({

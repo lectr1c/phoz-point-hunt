@@ -7,10 +7,9 @@ import {
   teams,
   users,
 } from "~/lib/db/schema";
-import { asc, desc, eq, gt } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import LineChart from "~/components/common/LineChart";
-import * as console from "node:console";
 import Image from "next/image";
 import TeamColorCircle from "~/components/common/TeamColorCircle";
 import NewsFeed from "~/components/common/NewsFeed";
@@ -33,15 +32,6 @@ export default async function HomePage() {
     .orderBy(desc(points.addedAt))
     .limit(10);
 
-  const date = new Date();
-  date.setHours(0, 0, 0, 0);
-  date.setDate(date.getDate() + 1);
-  const latestPointsQuery = await db
-    .select()
-    .from(pointsByDateView)
-    .where(gt(pointsByDateView.viewDate, date.toDateString()))
-    .orderBy(asc(pointsByDateView.teamId))
-    .innerJoin(teams, eq(pointsByDateView.teamId, teams.id));
 
   const teamsQuery = await db.query.teams.findMany();
 
@@ -76,19 +66,6 @@ export default async function HomePage() {
       borderColor: team.secondaryColor,
     });
   }
-
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as const,
-      },
-      title: {
-        display: false,
-        text: "Phöz-poängjakt",
-      },
-    },
-  };
 
   const data = {
     labels,
@@ -215,7 +192,7 @@ export default async function HomePage() {
           <div className="absolute top-2 right-4 text-2xl opacity-50">🏆</div>
         </CardHeader>
         <CardContent className="bg-gradient-to-br from-white to-orange-50">
-          <LineChart options={options} data={data} height={350} />
+          <LineChart data={data} height={350} />
         </CardContent>
       </Card>
     </main>

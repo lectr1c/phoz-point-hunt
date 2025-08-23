@@ -40,14 +40,15 @@ const defaultOptions = {
         font: {
           size: 16,
           family: 'Inter, system-ui, sans-serif',
-          weight: '600',
+          weight: 'bold' as const,
         },
         color: '#dc2626',
-        generateLabels: function(chart: any) {
+        generateLabels: (chart: Chart) => {
+          // eslint-disable-next-line @typescript-eslint/unbound-method
           const original = Chart.defaults.plugins.legend.labels.generateLabels;
-          const labels = original.call(this, chart);
+          const labels = original(chart);
           
-          labels.forEach((label: any) => {
+          labels.forEach((label) => {
             // Add racing flag emoji to legend
             label.text = `🏎️ ${label.text}`;
           });
@@ -68,18 +69,18 @@ const defaultOptions = {
       padding: 16,
       titleFont: {
         size: 14,
-        weight: '600',
+        weight: 'bold' as const,
       },
       bodyFont: {
         size: 13,
-        weight: '500',
+        weight: 'normal' as const,
       },
       callbacks: {
-        title: function(context: any) {
-          return `🏁 ${context[0].label}`;
+        title: function(context: Array<{ label?: string }>) {
+          return `🏁 ${context[0]?.label ?? ''}`;
         },
-        label: function(context: any) {
-          return `${context.dataset.label}: ${context.parsed.y} poäng 🏆`;
+        label: function(context: { dataset?: { label?: string }; parsed?: { y?: number } }) {
+          return `${context.dataset?.label ?? ''}: ${context.parsed?.y ?? 0} poäng 🏆`;
         },
       },
     },
@@ -96,7 +97,7 @@ const defaultOptions = {
         font: {
           size: 13,
           family: 'Inter, system-ui, sans-serif',
-          weight: '600',
+          weight: 'bold' as const,
         },
       },
       title: {
@@ -105,7 +106,7 @@ const defaultOptions = {
         color: '#dc2626',
         font: {
           size: 14,
-          weight: '700',
+          weight: 'bold' as const,
         },
       },
     },
@@ -120,9 +121,9 @@ const defaultOptions = {
         font: {
           size: 13,
           family: 'Inter, system-ui, sans-serif',
-          weight: '600',
+          weight: 'bold' as const,
         },
-        callback: function(value: any) {
+        callback: function(value: number | string) {
           return value + ' pts';
         },
       },
@@ -132,7 +133,7 @@ const defaultOptions = {
         color: '#dc2626',
         font: {
           size: 14,
-          weight: '700',
+          weight: 'bold' as const,
         },
       },
     },
