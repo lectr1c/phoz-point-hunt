@@ -1,14 +1,7 @@
 "use server";
 import { db } from "~/lib/db";
-import { and, desc, eq, gte } from "drizzle-orm";
-import {
-  coupons,
-  points,
-  pointsByDateView,
-  teams,
-  users,
-} from "~/lib/db/schema";
-import { currentUser } from "@clerk/nextjs/server";
+import { and, eq } from "drizzle-orm";
+import { coupons, points, users } from "~/lib/db/schema";
 
 export default async function registerPoints(
   prevState: { title: string; description: string; success: boolean },
@@ -16,9 +9,7 @@ export default async function registerPoints(
 ) {
   const rawFormData = {
     coupon: formData.get("code") as string,
-    teamId: formData.get("team") as unknown as number,
-    username: formData.get("username") as string,
-    userId: formData.get("userId") as string,
+    teamId: Number(formData.get("team")),
   };
 
   if (rawFormData.coupon == null)
@@ -49,6 +40,25 @@ export default async function registerPoints(
       success: false,
     };
 
+  if (!rawFormData.teamId)
+    return {
+      title: "Fel inträffat",
+      description: "Inget lag valdes",
+      success: false,
+    };
+
+  // Every team has one shared "Anonymt" user that points get registered
+  // against. Provision it on first use instead of requiring it to be
+  // created by hand for every team.
+  await db
+    .insert(users)
+    .values({
+      id: `anon-team-${rawFormData.teamId}`,
+      teamId: rawFormData.teamId,
+      username: "Anonymt",
+    })
+    .onConflictDoNothing({ target: users.id });
+
   const anonUser = await db.query.users.findFirst({
     where: and(
       eq(users.teamId, rawFormData.teamId),
@@ -56,12 +66,17 @@ export default async function registerPoints(
     ),
   });
 
-  if (anonUser) {
-    await db.insert(points).values({
-      couponId: coupon.id,
-      userId: anonUser.id,
-    });
-  }
+  if (!anonUser)
+    return {
+      title: "Fel inträffat",
+      description: "Kunde inte hitta eller skapa laget",
+      success: false,
+    };
+
+  await db.insert(points).values({
+    couponId: coupon.id,
+    userId: anonUser.id,
+  });
 
   return {
     title: `${coupon.couponWorth} Poäng Registrerades!`,

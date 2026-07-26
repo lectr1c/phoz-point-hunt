@@ -49,8 +49,22 @@ export default async function RegisterPointsManAction(
 
   const couponID = couponIdResult[0]!.id;
 
+  const teamId = Number(team);
+
+  // Every team has one shared "Anonymt" user that points get registered
+  // against. Provision it on first use instead of requiring it to be
+  // created by hand for every team.
+  await db
+    .insert(users)
+    .values({
+      id: `anon-team-${teamId}`,
+      teamId: teamId,
+      username: "Anonymt",
+    })
+    .onConflictDoNothing({ target: users.id });
+
   const anonUser = await db.query.users.findFirst({
-    where: and(eq(users.teamId, Number(team)), eq(users.username, "Anonymt")),
+    where: and(eq(users.teamId, teamId), eq(users.username, "Anonymt")),
   });
 
   await db
