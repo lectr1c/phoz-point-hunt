@@ -1,14 +1,10 @@
 "use server";
 import QRCode from "qrcode";
-import { type drive_v3, google } from "googleapis";
 import { PDFDocument } from "pdf-lib";
 import { db } from "~/lib/db";
 import { and, eq, inArray, isNull } from "drizzle-orm";
 import { coupons, coupons as dbCoupons, points } from "~/lib/db/schema";
-import stream from "stream";
 import { DOMParser } from "xmldom";
-import fs from "fs/promises";
-import path from "path";
 import { revalidatePath } from "next/cache";
 
 export default async function GeneratePDFAction() {
@@ -33,20 +29,6 @@ export default async function GeneratePDFAction() {
   }
 
   const doc = await PDFDocument.create();
-  const SCOPES = ["https://www.googleapis.com/auth/drive"];
-
-  const auth = new google.auth.GoogleAuth({
-    scopes: SCOPES,
-    credentials: {
-      private_key: process.env.PRIVATE_KEY,
-      client_email: process.env.CLIENT_EMAIL,
-    },
-  });
-
-  const drive: drive_v3.Drive = google.drive({
-    version: "v3",
-    auth: auth,
-  });
 
   let page = doc.addPage();
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
@@ -106,24 +88,7 @@ export default async function GeneratePDFAction() {
     useObjectStreams: true,
   });
 
-  const exportsDir = path.join(process.cwd(), "exports");
-  await fs.mkdir(exportsDir, { recursive: true });
   const filename = `${couponsDB.length}-coupons-${Date.now()}.pdf`;
-  await fs.writeFile(path.join(exportsDir, filename), bytes);
-
-  const res = await drive.files.create({
-    media: {
-      body: new stream.PassThrough().end(bytes),
-      mimeType: "application/pdf",
-    },
-    requestBody: {
-      name: couponsDB.length + " coupons",
-      mimeType: "application/pdf",
-      driveId: process.env.DRIVE_ID,
-      parents: ["" + process.env.FOLDER_ID],
-    },
-    supportsTeamDrives: true,
-  });
 
   await db
     .update(dbCoupons)
@@ -139,7 +104,7 @@ export default async function GeneratePDFAction() {
 
   return {
     title: "PDF genererad",
-    description: "Filen laddas ner till din enhet och är även uppladdad till Google Drive",
+    description: "Filen laddas ner till din enhet",
     success: true,
     pdfBase64: Buffer.from(bytes).toString("base64"),
     filename,
