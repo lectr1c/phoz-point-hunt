@@ -15,6 +15,9 @@ import TeamColorCircle from "~/components/common/TeamColorCircle";
 import NewsFeed from "~/components/common/NewsFeed";
 import { cn } from "~/lib/utils";
 
+// End date of this year's event; the graph and Topplistan totals stop here.
+const POINTS_CUTOFF_DATE = "2026-09-05";
+
 export default async function HomePage() {
   const query = await db
     .select({
@@ -54,7 +57,7 @@ export default async function HomePage() {
       .where(
         and(
           eq(pointsByDateView.teamId, team.id),
-          lte(pointsByDateView.viewDate, "2025-08-30"),
+          lte(pointsByDateView.viewDate, POINTS_CUTOFF_DATE),
         ),
       );
 
