@@ -1,5 +1,6 @@
 "use client";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -21,7 +22,7 @@ import {
 } from "~/components/ui/popover";
 
 export default function CreateTeam() {
-  const [state, formAction] = useFormState(CreateTeamAction, {
+  const [state, formAction] = useActionState(CreateTeamAction, {
     title: "",
     description: "",
     success: false,
@@ -127,7 +128,7 @@ function SubmitButton() {
     <Button
       disabled={pending}
       className={
-        !pending ? "disabled:cursor-progress disabled:bg-slate-600" : ""
+        !pending ? "disabled:cursor-progress disabled:bg-muted disabled:text-muted-foreground" : ""
       }
       type="submit"
     >

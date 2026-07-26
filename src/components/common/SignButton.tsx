@@ -1,9 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { Button } from "~/components/ui/button";
-import Link from "next/link";
+import { SignedIn, UserButton } from "@clerk/nextjs";
 
 export default function SignButton() {
   const pathname = usePathname();
@@ -20,14 +18,6 @@ export default function SignButton() {
       <SignedIn>
         <UserButton />
       </SignedIn>
-      <SignedOut>
-        <Link href="/sign-in">
-          <Button>Sign In</Button>
-        </Link>
-        <Link href="/sign-up">
-          <Button>Sign Up</Button>
-        </Link>
-      </SignedOut>
     </div>
   );
 }

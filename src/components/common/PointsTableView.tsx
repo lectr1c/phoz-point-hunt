@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { Card, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   Table,
   TableBody,
@@ -35,19 +35,16 @@ export default function PointsTableView({
   const timeAgo = new TimeAgo("sv");
   return (
     <div className="w-full">
-      <Card className="shadow-lg border-2 border-orange-400 bg-gradient-to-br from-orange-50 to-red-50">
-        <CardHeader className="pb-4 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-t-lg">
-          <h2 className="text-2xl font-bold text-center tracking-wide drop-shadow-sm">
-            🏁 Senaste registrerade poäng 🏁
-          </h2>
+      <Card className="p-6 shadow-soft sm:p-8">
+        <CardHeader className="px-0 pb-4 pt-0 text-center">
+          <CardTitle className="text-xl">Senaste registrerade poäng</CardTitle>
         </CardHeader>
-        <CardContent className="pt-0">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[20px]"></TableHead>
               <TableHead>Lag</TableHead>
-              <TableHead className="px-0 font-semibold">Poäng</TableHead>
+              <TableHead className="px-0">Poäng</TableHead>
               <TableHead className="text-right max-[600px]:hidden">
                 Registrerad
               </TableHead>
@@ -66,13 +63,15 @@ export default function PointsTableView({
                       secondaryColor={pointRow.teamSecondaryColor}
                     />
                   </TableCell>
-                  <TableCell className="font-medium text-gray-900">
+                  <TableCell className="font-medium text-foreground">
                     <div className="max-[500px]:max-w-[200px] max-[500px]:overflow-hidden max-[500px]:text-ellipsis max-[500px]:whitespace-nowrap">
                       {pointRow.teamname}
                     </div>
                   </TableCell>
-                  <TableCell className="font-bold text-xl text-orange-600 drop-shadow-sm">{pointRow.couponWorth}</TableCell>
-                  <TableCell className="text-right max-[600px]:hidden">
+                  <TableCell className="font-semibold tabular-nums">
+                    {pointRow.couponWorth}
+                  </TableCell>
+                  <TableCell className="text-right text-muted-foreground max-[600px]:hidden">
                     {timeAgo.format(
                       pointRow.addedAt ? pointRow.addedAt : new Date(),
                     )}
@@ -81,11 +80,14 @@ export default function PointsTableView({
                     <div className="flex justify-center">
                       <Popover>
                         <PopoverTrigger asChild>
-                          <Button className="rounded-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 p-3 font-bold shadow-lg min-h-[44px] min-w-[44px] flex items-center justify-center border-2 border-yellow-400 transform hover:scale-105 transition-all duration-200">
+                          <Button
+                            size="icon"
+                            className="h-9 w-9 rounded-full bg-accent text-accent-foreground shadow-soft hover:bg-accent/90"
+                          >
                             <TimerIcon height={16} width={16} />
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-fit text-xs bg-gradient-to-r from-orange-100 to-red-100 border-2 border-orange-300">
+                        <PopoverContent className="w-fit text-xs">
                           {timeAgo.format(
                             pointRow.addedAt ? pointRow.addedAt : new Date(),
                           )}
@@ -98,7 +100,6 @@ export default function PointsTableView({
             })}
           </TableBody>
         </Table>
-        </CardContent>
       </Card>
     </div>
   );

@@ -7,6 +7,8 @@ import { and, eq, inArray, isNull } from "drizzle-orm";
 import { coupons, coupons as dbCoupons, points } from "~/lib/db/schema";
 import stream from "stream";
 import { DOMParser } from "xmldom";
+import fs from "fs/promises";
+import path from "path";
 
 export default async function GeneratePDFAction() {
   const couponsDB = await db
@@ -103,6 +105,11 @@ export default async function GeneratePDFAction() {
     useObjectStreams: true,
   });
 
+  const exportsDir = path.join(process.cwd(), "exports");
+  await fs.mkdir(exportsDir, { recursive: true });
+  const filename = `${couponsDB.length}-coupons-${Date.now()}.pdf`;
+  await fs.writeFile(path.join(exportsDir, filename), bytes);
+
   const res = await drive.files.create({
     media: {
       body: new stream.PassThrough().end(bytes),
@@ -128,10 +135,10 @@ export default async function GeneratePDFAction() {
     );
 
   return {
-    title: "Fil uppladdat",
-    description: "Filen är uppe nu på google drive i Kuponger mappen",
+    title: "PDF genererad",
+    description: "Filen laddas ner till din enhet och är även uppladdad till Google Drive",
     success: true,
-    downloadLink:
-      "https://drive.google.com/drive/u/2/folders/0AGkb2ZUX1uaHUk9PVA",
+    pdfBase64: Buffer.from(bytes).toString("base64"),
+    filename,
   };
 }

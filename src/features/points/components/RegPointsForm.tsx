@@ -11,7 +11,8 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { useToast } from "~/components/ui/use-toast";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import registerPoints from "~/features/points/actions/_registerPointsAction";
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
@@ -32,7 +33,7 @@ export default function RegisterPointsForm({
 }) {
   const { toast } = useToast();
 
-  const [state, formAction] = useFormState(registerPoints, {
+  const [state, formAction] = useActionState(registerPoints, {
     title: "",
     description: "",
     success: false,
@@ -52,8 +53,8 @@ export default function RegisterPointsForm({
   }, [state, toast]);
 
   return (
-    <div className="flex h-screen w-full items-center justify-center">
-      <Card>
+    <div className="flex min-h-screen w-full items-center justify-center p-4">
+      <Card className="w-full max-w-sm shadow-soft-lg">
         <CardHeader>
           <CardTitle>Poäng Registrering</CardTitle>
           <CardDescription>
@@ -74,7 +75,9 @@ export default function RegisterPointsForm({
             <SubmitButton />
           </form>
         </CardContent>
-        <CardFooter>Koden kan användas bara en gång!</CardFooter>
+        <CardFooter className="text-sm text-muted-foreground">
+          Koden kan användas bara en gång!
+        </CardFooter>
       </Card>
     </div>
   );
@@ -87,7 +90,7 @@ function SubmitButton() {
     <Button
       disabled={pending}
       className={
-        !pending ? "disabled:cursor-progress disabled:bg-slate-600" : ""
+        !pending ? "disabled:cursor-progress disabled:bg-muted disabled:text-muted-foreground" : ""
       }
       type="submit"
     >

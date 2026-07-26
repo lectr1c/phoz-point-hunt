@@ -8,23 +8,34 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import GeneratePDFAction from "~/features/dashboard/actions/GeneratePDFAction";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "~/components/ui/use-toast";
+
+function base64ToPdfBlob(base64: string) {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return new Blob([bytes], { type: "application/pdf" });
+}
 
 export default function GeneratePDF({
   unExportedCoupons,
 }: {
   unExportedCoupons: number;
 }) {
-  const [state, formAction] = useFormState(GeneratePDFAction, {
+  const [state, formAction] = useActionState(GeneratePDFAction, {
     title: "",
     description: "",
     success: false,
   });
 
   const { toast } = useToast();
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (state.title === "") return;
@@ -33,6 +44,12 @@ export default function GeneratePDF({
       title: state.title,
       description: state.description,
     });
+
+    if (state.pdfBase64) {
+      const url = URL.createObjectURL(base64ToPdfBlob(state.pdfBase64));
+      setDownloadUrl(url);
+      return () => URL.revokeObjectURL(url);
+    }
   }, [state, toast]);
 
   return (
@@ -45,8 +62,8 @@ export default function GeneratePDF({
         <form action={formAction} className="flex h-min flex-col gap-y-2">
           <SubmitButton />
         </form>
-        {state.downloadLink ? (
-          <a href={state.downloadLink}>
+        {downloadUrl ? (
+          <a href={downloadUrl} download={state.filename ?? "coupons.pdf"}>
             <Button className="mt-2 bg-green-600 hover:bg-green-500">
               Ladda ner PDF:en
             </Button>
@@ -67,7 +84,7 @@ function SubmitButton() {
     <Button
       disabled={pending}
       className={
-        !pending ? "disabled:cursor-progress disabled:bg-slate-600" : ""
+        !pending ? "disabled:cursor-progress disabled:bg-muted disabled:text-muted-foreground" : ""
       }
       type="submit"
     >

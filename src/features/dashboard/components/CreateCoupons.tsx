@@ -1,7 +1,8 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import CreateCouponsAction from "~/features/dashboard/actions/CreateCouponsAction";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -9,7 +10,7 @@ import { useToast } from "~/components/ui/use-toast";
 import { useEffect } from "react";
 
 export default function CreateCoupons() {
-  const [state, formAction] = useFormState(CreateCouponsAction, {
+  const [state, formAction] = useActionState(CreateCouponsAction, {
     title: "",
     description: "",
     success: false,
@@ -51,7 +52,7 @@ function SubmitButton() {
     <Button
       disabled={pending}
       className={
-        !pending ? "disabled:cursor-progress disabled:bg-slate-600" : ""
+        !pending ? "disabled:cursor-progress disabled:bg-muted disabled:text-muted-foreground" : ""
       }
       type="submit"
     >

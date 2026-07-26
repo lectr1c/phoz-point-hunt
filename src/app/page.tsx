@@ -7,12 +7,13 @@ import {
   teams,
   users,
 } from "~/lib/db/schema";
-import { desc, eq } from "drizzle-orm";
-import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { and, desc, eq, lte } from "drizzle-orm";
+import { Card, CardHeader, CardTitle } from "~/components/ui/card";
 import LineChart from "~/components/common/LineChart";
 import Image from "next/image";
 import TeamColorCircle from "~/components/common/TeamColorCircle";
 import NewsFeed from "~/components/common/NewsFeed";
+import { cn } from "~/lib/utils";
 
 export default async function HomePage() {
   const query = await db
@@ -50,7 +51,12 @@ export default async function HomePage() {
     const pointsQuery = await db
       .select()
       .from(pointsByDateView)
-      .where(eq(pointsByDateView.teamId, team.id));
+      .where(
+        and(
+          eq(pointsByDateView.teamId, team.id),
+          lte(pointsByDateView.viewDate, "2025-08-30"),
+        ),
+      );
 
     if (index == 0) {
       labels = pointsQuery.map((pointTeamRow) => {
@@ -89,112 +95,70 @@ export default async function HomePage() {
     });
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-slate-50 via-orange-50 to-red-50 relative overflow-hidden">
-      {/* Background racing elements */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div className="absolute top-10 left-10 text-6xl rotate-12">🏎️</div>
-        <div className="absolute top-32 right-20 text-4xl -rotate-45">🏁</div>
-        <div className="absolute bottom-32 left-32 text-5xl rotate-45">🏆</div>
-        <div className="absolute bottom-20 right-10 text-6xl -rotate-12">🏎️</div>
-        <div className="absolute top-1/2 left-1/4 text-3xl rotate-90">⚡</div>
-        <div className="absolute top-1/3 right-1/3 text-3xl -rotate-90">⚡</div>
-      </div>
-      
-      {/* Racing stripes */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <div className="h-2 bg-gradient-to-r from-red-500 to-yellow-500 absolute top-0 left-0 w-full"></div>
-        <div className="h-1 bg-gradient-to-r from-yellow-500 to-red-500 absolute top-2 left-0 w-full"></div>
-        <div className="h-2 bg-gradient-to-r from-red-500 to-yellow-500 absolute bottom-0 left-0 w-full"></div>
-        <div className="h-1 bg-gradient-to-r from-yellow-500 to-red-500 absolute bottom-2 left-0 w-full"></div>
-      </div>
-      
-      <div className="mt-10 flex w-screen max-w-[1100px] flex-wrap items-center justify-center relative z-10">
-        <Image
-          src="/heroes.png"
-          height={374}
-          width={525}
-          alt={"Superheroes"}
-          priority
-        />
-        <div>
-          <div className="space-y-4">
-            {teamlist.map((value, index) => {
-              // Create gradient from team's secondary to main color
-              const teamGradient = `from-[${value.borderColor}] to-[${value.backgroundColor}]`;
-              
-              return (
-                <div
-                  key={value.teamName}
-                  className={`group relative flex w-[100%] min-w-[400px] max-w-[525px] items-center justify-between bg-gradient-to-r ${teamGradient} rounded-2xl px-6 py-5 shadow-lg hover:shadow-xl transform hover:scale-102 transition-all duration-300 border-2 overflow-hidden`}
-                  style={{
-                    background: `linear-gradient(to right, ${value.borderColor}, ${value.backgroundColor})`,
-                    borderColor: value.borderColor,
-                  }}
-                >
-                  {/* Racing stripes background effect */}
-                  <div className="absolute inset-0 opacity-15">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-white"></div>
-                    <div className="absolute bottom-0 left-0 w-full h-1 bg-white"></div>
-                    <div className="absolute top-1/2 left-0 w-full h-px bg-white/50"></div>
-                  </div>
-                  
-                  <div className="flex items-center gap-4 relative z-10">
-                    <div className="flex items-center justify-center w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full text-lg font-bold border-2 border-white/40 shadow-lg relative">
-                      <span className="text-white drop-shadow-md">{index + 1}</span>
-                      {/* Minimal medal accent */}
-                      {index === 0 && (
-                        <div className="absolute -top-1 -right-1 text-xs">🥇</div>
-                      )}
-                      {index === 1 && (
-                        <div className="absolute -top-1 -right-1 text-xs">🥈</div>
-                      )}
-                      {index === 2 && (
-                        <div className="absolute -top-1 -right-1 text-xs">🥉</div>
-                      )}
+    <main className="min-h-screen">
+      <div className="container flex flex-col gap-16 py-12">
+        <section className="flex flex-wrap items-center justify-center gap-10 lg:justify-between">
+          <Image
+            src="/heroes.png"
+            height={374}
+            width={525}
+            alt={"Superheroes"}
+            priority
+            className="h-auto w-full max-w-[420px] lg:max-w-[480px]"
+          />
+          <div className="w-full max-w-[520px]">
+            <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-slate-300">
+              Topplistan
+            </h2>
+            <div className="space-y-2">
+              {teamlist.map((value, index) => {
+                const isLeader = index === 0;
+                return (
+                  <div
+                    key={value.teamName}
+                    className={cn(
+                      "flex items-center justify-between rounded-xl border border-border bg-card px-5 py-3.5 shadow-soft transition-shadow hover:shadow-soft-lg",
+                      isLeader && "ring-1 ring-accent/40",
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={cn(
+                          "w-5 text-sm font-semibold tabular-nums",
+                          isLeader ? "text-accent" : "text-muted-foreground",
+                        )}
+                      >
+                        {index + 1}
+                      </span>
+                      <TeamColorCircle
+                        mainColor={value.backgroundColor}
+                        secondaryColor={value.borderColor}
+                      />
+                      <span className="font-semibold text-foreground">
+                        {value.teamName}
+                      </span>
                     </div>
-                    <TeamColorCircle
-                      mainColor={value.backgroundColor}
-                      secondaryColor={value.borderColor}
-                      size="lg"
-                    />
-                    <span className="font-bold text-white drop-shadow-lg text-lg">{value.teamName}</span>
+                    <span className="font-bold tabular-nums text-foreground">
+                      {value.totalPoints}
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2 relative z-10">
-                    <span className="text-3xl font-black text-white drop-shadow-lg">{value.totalPoints}</span>
-                    <span className="text-sm font-semibold text-white/80">pts</span>
-                  </div>
-                  
-                  {/* Checkered flag pattern for 1st place */}
-                  {index === 0 && (
-                    <div className="absolute top-2 right-2 text-2xl animate-pulse opacity-80">
-                      🏁
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="mt-10 w-screen max-w-[1100px]">
+        </section>
+
         <NewsFeed />
-      </div>
-      <div className="mt-10 w-screen max-w-[1100px]">
+
         <PointsTableView pointRows={query} />
-      </div>
-      <Card className="my-10 w-screen max-w-[1100px] shadow-xl border-4 border-gradient-to-r from-red-500 to-orange-500 bg-gradient-to-br from-orange-50 to-red-50">
-        <CardHeader className="pb-4 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white rounded-t-lg relative overflow-hidden">
-          <div className="absolute inset-0 bg-black/10"></div>
-          <h2 className="text-3xl font-bold text-center tracking-wide drop-shadow-lg relative z-10">
-            🏁 Poänghistorik 🏁
-          </h2>
-          <div className="absolute top-2 left-4 text-2xl opacity-50">🏆</div>
-          <div className="absolute top-2 right-4 text-2xl opacity-50">🏆</div>
-        </CardHeader>
-        <CardContent className="bg-gradient-to-br from-white to-orange-50">
+
+        <Card className="p-8 shadow-soft sm:p-10">
+          <CardHeader className="px-0 pb-6 pt-0 text-center">
+            <CardTitle className="text-xl">Poänghistorik</CardTitle>
+          </CardHeader>
           <LineChart data={data} height={350} />
-        </CardContent>
-      </Card>
+        </Card>
+      </div>
     </main>
   );
 }

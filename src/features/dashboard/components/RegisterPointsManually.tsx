@@ -1,6 +1,7 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { useToast } from "~/components/ui/use-toast";
 import { useEffect, useState } from "react";
 import type { TTeam } from "~/types/types";
@@ -19,7 +20,7 @@ import { Card } from "~/components/ui/card";
 import { redirect } from "next/navigation";
 
 export default function RegisterPointsManually({ teams }: { teams: TTeam[] }) {
-  const [state, formAction] = useFormState(RegisterPointsManAction, {
+  const [state, formAction] = useActionState(RegisterPointsManAction, {
     title: "",
     description: "",
     success: false,
@@ -75,7 +76,7 @@ function SubmitButton() {
     <Button
       disabled={pending}
       className={
-        !pending ? "mt-3 disabled:cursor-progress disabled:bg-slate-600" : ""
+        !pending ? "mt-3 disabled:cursor-progress disabled:bg-muted disabled:text-muted-foreground" : ""
       }
       type="submit"
     >

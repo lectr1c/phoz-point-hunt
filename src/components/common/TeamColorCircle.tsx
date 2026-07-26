@@ -15,7 +15,7 @@ export default function TeamColorCircle({
 
   return (
     <div
-      className={`${sizeClasses[size]} rounded-full border-2 transition-all duration-150 hover:scale-110 cursor-pointer`}
+      className={`${sizeClasses[size]} rounded-full border-2`}
       style={{
         backgroundColor: mainColor,
         borderColor: secondaryColor,

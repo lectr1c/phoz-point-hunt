@@ -1,5 +1,9 @@
 "use client";
-import type { CSSProperties } from "react";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "~/lib/utils";
+import SignButton from "~/components/common/SignButton";
 import { pages } from "./Pages";
 
 export function Header({
@@ -9,83 +13,63 @@ export function Header({
   children: React.ReactNode;
   role: string;
 }) {
-  const headerStyles: CSSProperties = {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    margin: "auto",
-    padding: "1rem 2rem",
-    background: "#ffffff",
-    color: "#1f2937",
-    boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-    borderBottom: "1px solid #e5e7eb",
-    position: "relative" as const,
-  };
-
-  const navStyles: CSSProperties = {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.5rem",
-  };
-
-  const logoStyles: CSSProperties = {
-    fontSize: "1.5rem",
-    fontWeight: "600",
-    display: "flex",
-    alignItems: "center",
-    gap: "0.5rem",
-    color: "#dc2626",
-  };
+  const pathname = usePathname();
 
   return (
-    <header style={headerStyles}>
-      <div style={logoStyles}>
-        <span>🏁</span>
+    <header className="dark sticky top-0 z-40 border-b border-border/80 bg-background/60 text-foreground backdrop-blur-md">
+      <div className="container flex h-16 items-center justify-between">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-[15px] font-semibold tracking-tight text-foreground"
+        >
+          <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-sm text-accent-foreground">
+            P
+          </span>
+          Phöz Poäng Jakt
+        </Link>
+
+        <nav className="flex items-center gap-1">
+          {pages.map(
+            (page, index) =>
+              page.isMenu &&
+              (!page.roles || page.roles.includes(role)) && (
+                <NavLink key={index} href={page.path} active={pathname === page.path}>
+                  {page.label}
+                </NavLink>
+              ),
+          )}
+        </nav>
+
+        <div className="flex items-center gap-3">
+          {children}
+          <SignButton />
+        </div>
       </div>
-      <div>{children}</div>
-      <nav style={navStyles}>
-        {pages.map(
-          (page, index) =>
-            page.isMenu &&
-            (!page.roles || page.roles.includes(role)) && (
-              <NavLink key={index} href={page.path}>
-                {page.label}
-              </NavLink>
-            ),
-        )}
-      </nav>
     </header>
   );
 }
 
 function NavLink({
   href,
+  active,
   children,
 }: {
   href: string;
+  active: boolean;
   children: React.ReactNode;
 }) {
-  const navLinkStyles: CSSProperties = {
-    textDecoration: "none",
-    color: "#374151",
-    margin: "0 0.5rem",
-    padding: "0.5rem 1rem",
-    borderRadius: "8px",
-    transition: "all 0.2s ease",
-    fontWeight: "500",
-    border: "1px solid #e5e7eb",
-    fontSize: "14px",
-  };
-  
   return (
-    <a
+    <Link
       href={href}
-      style={navLinkStyles}
-      className="hover:bg-gray-50 hover:border-gray-300 hover:text-gray-900"
+      className={cn(
+        "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+        active
+          ? "bg-secondary text-foreground"
+          : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground",
+      )}
     >
       {children}
-    </a>
+    </Link>
   );
 }
 

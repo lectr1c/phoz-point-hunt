@@ -21,7 +21,6 @@ Chart.register(
     Legend
 );
 
-// Cars-inspired chart options with racing theme
 const defaultOptions = {
   responsive: true,
   maintainAspectRatio: false,
@@ -32,55 +31,11 @@ const defaultOptions = {
   plugins: {
     legend: {
       position: 'top' as const,
-      align: 'center' as const,
-      labels: {
-        usePointStyle: true,
-        pointStyle: 'circle',
-        padding: 25,
-        font: {
-          size: 16,
-          family: 'Inter, system-ui, sans-serif',
-          weight: 'bold' as const,
-        },
-        color: '#dc2626',
-        generateLabels: (chart: Chart) => {
-          // eslint-disable-next-line @typescript-eslint/unbound-method
-          const original = Chart.defaults.plugins.legend.labels.generateLabels;
-          const labels = original(chart);
-          
-          labels.forEach((label) => {
-            // Add racing flag emoji to legend
-            label.text = `🏎️ ${label.text}`;
-          });
-          
-          return labels;
-        },
-      },
     },
     tooltip: {
-      backgroundColor: 'rgba(220, 38, 38, 0.95)',
-      titleColor: '#ffffff',
-      bodyColor: '#ffffff',
-      borderColor: '#facc15',
-      borderWidth: 2,
-      cornerRadius: 12,
-      displayColors: true,
-      usePointStyle: true,
-      padding: 16,
-      titleFont: {
-        size: 14,
-        weight: 'bold' as const,
-      },
-      bodyFont: {
-        size: 13,
-        weight: 'normal' as const,
-      },
       callbacks: {
-        title: function(context: Array<{ label?: string }>) {
-          return `🏁 ${context[0]?.label ?? ''}`;
-        },
         label: function(context: { dataset?: { label?: string }; parsed?: { y?: number } }) {
-          return `${context.dataset?.label ?? ''}: ${context.parsed?.y ?? 0} poäng 🏆`;
+          return `${context.dataset?.label ?? ''}: ${context.parsed?.y ?? 0} poäng`;
         },
       },
     },
@@ -88,52 +43,16 @@ const defaultOptions = {
   scales: {
     x: {
       grid: {
-        display: true,
-        color: 'rgba(249, 115, 22, 0.2)',
-        drawBorder: false,
-      },
-      ticks: {
-        color: '#dc2626',
-        font: {
-          size: 13,
-          family: 'Inter, system-ui, sans-serif',
-          weight: 'bold' as const,
-        },
-      },
-      title: {
-        display: true,
-        text: '📅 Datum',
-        color: '#dc2626',
-        font: {
-          size: 14,
-          weight: 'bold' as const,
-        },
+        color: 'rgba(0, 0, 0, 0.05)',
       },
     },
     y: {
       grid: {
-        display: true,
-        color: 'rgba(249, 115, 22, 0.2)',
-        drawBorder: false,
+        color: 'rgba(0, 0, 0, 0.05)',
       },
       ticks: {
-        color: '#dc2626',
-        font: {
-          size: 13,
-          family: 'Inter, system-ui, sans-serif',
-          weight: 'bold' as const,
-        },
         callback: function(value: number | string) {
           return value + ' pts';
-        },
-      },
-      title: {
-        display: true,
-        text: '🏆 Totala Poäng',
-        color: '#dc2626',
-        font: {
-          size: 14,
-          weight: 'bold' as const,
         },
       },
     },
@@ -141,19 +60,11 @@ const defaultOptions = {
   elements: {
     line: {
       tension: 0.4,
-      borderWidth: 4,
-      borderCapStyle: 'round' as const,
-      borderJoinStyle: 'round' as const,
+      borderWidth: 2,
     },
     point: {
-      radius: 6,
-      hoverRadius: 10,
-      borderWidth: 3,
-      hoverBorderWidth: 4,
-      backgroundColor: '#ffffff',
-      borderColor: '#dc2626',
-      hoverBorderColor: '#facc15',
-      hoverBackgroundColor: '#facc15',
+      radius: 4,
+      hoverRadius: 6,
     },
   },
 };
@@ -176,7 +87,6 @@ export default function LineChart({
   options?: Partial<typeof defaultOptions>;
   height?: number;
 }) {
-  // Merge custom options with defaults
   const chartOptions = {
     ...defaultOptions,
     ...options,

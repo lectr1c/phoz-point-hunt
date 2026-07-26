@@ -10,7 +10,7 @@ import {
 } from "~/components/ui/table";
 import { Button } from "~/components/ui/button";
 import { useToast } from "~/components/ui/use-toast";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
 import DeleteTeamAction from "~/features/dashboard/actions/DeleteTeamAction";
@@ -29,7 +29,7 @@ export default function TeamTableList({
 }) {
   const { toast } = useToast();
 
-  const [state, formAction] = useFormState(DeleteTeamAction, {
+  const [state, formAction] = useActionState(DeleteTeamAction, {
     title: "",
     description: "",
     success: false,

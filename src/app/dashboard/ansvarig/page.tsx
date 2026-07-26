@@ -46,60 +46,84 @@ export default async function AnsvarigDashboard() {
     redirect("/");
   } else {
     return (
-      <div className="flex w-screen flex-col items-center justify-center gap-5 align-top">
-        <Tabs defaultValue="manageTeams" className="">
-          <TabsList className={"flex h-fit justify-center"}>
-            <TabsTrigger className="max-[463px]:text-wrap" value="nyheter">
-              Nyheter
-            </TabsTrigger>
-            <TabsTrigger className="max-[463px]:text-wrap" value="generatePDF">
-              Generera PDF
-            </TabsTrigger>
-            <TabsTrigger
-              className="max-[463px]:text-wrap"
-              value="createCoupons"
-            >
-              Skapa Kuponger
-            </TabsTrigger>
-            <TabsTrigger className="max-[463px]:text-wrap" value="createTeam">
-              Skapa Lag
-            </TabsTrigger>
-            <TabsTrigger
-              className="max-[463px]:text-wrap"
-              value="registerPointsManual"
-            >
-              Reg. Poäng
-            </TabsTrigger>
-            <TabsTrigger className="max-[463px]:text-wrap" value="manageTeams">
-              Hantera Lag
-            </TabsTrigger>
-          </TabsList>
-          <div className={"flex h-[430px] justify-center"}>
-            <TabsContent value="generatePDF">
-              <GeneratePDF
-                unExportedCoupons={
-                  unExportedCoupons[0] ? unExportedCoupons[0].count : 0
-                }
-              />
-            </TabsContent>
-            <TabsContent value="nyheter">
-              <CreateNewsPost />
-            </TabsContent>
-            <TabsContent value="registerPointsManual">
-              <RegisterPointsManually teams={teamsDB} />
-            </TabsContent>
-            <TabsContent value="createCoupons">
-              <CreateCoupons />
-            </TabsContent>
-            <TabsContent value="createTeam">
-              <CreateTeam />
-            </TabsContent>
-            <TabsContent value="manageTeams">
-              <TeamTableList teamsQuery={teamsQuery} />
-            </TabsContent>
+      <div className="min-h-screen">
+        <div className="container flex flex-col gap-8 py-10">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight text-white">
+              Dashboard
+            </h1>
+            <p className="text-sm text-slate-300">
+              Hantera lag, kuponger och nyheter
+            </p>
           </div>
-        </Tabs>
-        <UserTableList usersQuery={usersQuery} />
+
+          <Tabs defaultValue="manageTeams">
+            <TabsList className="flex h-fit flex-wrap justify-start gap-1 bg-transparent p-0 text-slate-300">
+              <TabsTrigger
+                className="max-[463px]:text-wrap data-[state=active]:bg-card data-[state=active]:shadow-soft"
+                value="nyheter"
+              >
+                Nyheter
+              </TabsTrigger>
+              <TabsTrigger
+                className="max-[463px]:text-wrap data-[state=active]:bg-card data-[state=active]:shadow-soft"
+                value="generatePDF"
+              >
+                Generera PDF
+              </TabsTrigger>
+              <TabsTrigger
+                className="max-[463px]:text-wrap data-[state=active]:bg-card data-[state=active]:shadow-soft"
+                value="createCoupons"
+              >
+                Skapa Kuponger
+              </TabsTrigger>
+              <TabsTrigger
+                className="max-[463px]:text-wrap data-[state=active]:bg-card data-[state=active]:shadow-soft"
+                value="createTeam"
+              >
+                Skapa Lag
+              </TabsTrigger>
+              <TabsTrigger
+                className="max-[463px]:text-wrap data-[state=active]:bg-card data-[state=active]:shadow-soft"
+                value="registerPointsManual"
+              >
+                Reg. Poäng
+              </TabsTrigger>
+              <TabsTrigger
+                className="max-[463px]:text-wrap data-[state=active]:bg-card data-[state=active]:shadow-soft"
+                value="manageTeams"
+              >
+                Hantera Lag
+              </TabsTrigger>
+            </TabsList>
+            <div className="mt-4 flex justify-center">
+              <TabsContent value="generatePDF" className="w-full">
+                <GeneratePDF
+                  unExportedCoupons={
+                    unExportedCoupons[0] ? unExportedCoupons[0].count : 0
+                  }
+                />
+              </TabsContent>
+              <TabsContent value="nyheter" className="w-full">
+                <CreateNewsPost />
+              </TabsContent>
+              <TabsContent value="registerPointsManual" className="w-full">
+                <RegisterPointsManually teams={teamsDB} />
+              </TabsContent>
+              <TabsContent value="createCoupons" className="w-full">
+                <CreateCoupons />
+              </TabsContent>
+              <TabsContent value="createTeam" className="w-full">
+                <CreateTeam />
+              </TabsContent>
+              <TabsContent value="manageTeams" className="w-full">
+                <TeamTableList teamsQuery={teamsQuery} />
+              </TabsContent>
+            </div>
+          </Tabs>
+
+          <UserTableList usersQuery={usersQuery} />
+        </div>
       </div>
     );
   }

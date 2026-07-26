@@ -2,9 +2,9 @@ import "./globals.css";
 
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import SignButton from "~/components/common/SignButton";
 import { Toaster } from "~/components/ui/toaster";
 import { HeaderServer } from "~/components/Header/HeaderServer";
+import SpaceBackground from "~/components/common/SpaceBackground";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,6 +26,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`font-sans ${inter.variable}`}>
+          <SpaceBackground />
           <HeaderServer>
             <Toaster />
           </HeaderServer>
