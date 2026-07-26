@@ -12,7 +12,7 @@ import { Button } from "~/components/ui/button";
 import { useToast } from "~/components/ui/use-toast";
 import { useActionState } from "react";
 import { useEffect } from "react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import DeleteTeamAction from "~/features/dashboard/actions/DeleteTeamAction";
 import { Input } from "~/components/ui/input";
 import TeamColorCircle from "~/components/common/TeamColorCircle";
@@ -28,6 +28,7 @@ export default function TeamTableList({
   }[];
 }) {
   const { toast } = useToast();
+  const router = useRouter();
 
   const [state, formAction] = useActionState(DeleteTeamAction, {
     title: "",
@@ -44,11 +45,9 @@ export default function TeamTableList({
     });
 
     if (state.success) {
-      redirect("/");
+      router.refresh();
     }
-  }, [state, toast]);
-
-  //TODO: Update view to remove row on delete
+  }, [state, toast, router]);
 
   return (
     <Card className="w-fit p-10 max-[350px]:p-5">

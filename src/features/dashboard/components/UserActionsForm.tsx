@@ -14,14 +14,7 @@ export default function UserActionsForm({
     teams: TTeam;
   };
 }) {
-  // const { toast } = useToast();
-  //
-  // toast({
-  //   title: state.title,
-  //   description: state.description,
-  // });
-
-  // const router = useRouter();
+  const router = useRouter();
 
   return (
     <>
@@ -36,8 +29,11 @@ export default function UserActionsForm({
       >
         <Button
           className="float-right w-fit bg-red-600"
-          type="submit"
-          onClick={() => deleteUser(user.users.id)}
+          type="button"
+          onClick={async () => {
+            await deleteUser(user.users.id);
+            router.refresh();
+          }}
         >
           Ta bort
         </Button>

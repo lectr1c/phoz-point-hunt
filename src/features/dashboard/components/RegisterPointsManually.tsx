@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { useToast } from "~/components/ui/use-toast";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import type { TTeam } from "~/types/types";
 import { Label } from "~/components/ui/label";
 import {
@@ -17,7 +17,7 @@ import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import RegisterPointsManAction from "~/features/dashboard/actions/RegisterPointsManAction";
 import { Card } from "~/components/ui/card";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPointsManually({ teams }: { teams: TTeam[] }) {
   const [state, formAction] = useActionState(RegisterPointsManAction, {
@@ -27,6 +27,7 @@ export default function RegisterPointsManually({ teams }: { teams: TTeam[] }) {
   });
 
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     if (state.title === "") return;
@@ -37,11 +38,9 @@ export default function RegisterPointsManually({ teams }: { teams: TTeam[] }) {
     });
 
     if (state.success) {
-      redirect("/");
+      router.refresh();
     }
-  }, [state, toast]);
-
-  const [date, setDate] = useState(new Date());
+  }, [state, toast, router]);
 
   return (
     <Card className={"w-[300px] p-3"}>

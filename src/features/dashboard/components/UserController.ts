@@ -4,6 +4,7 @@ import { db } from "~/lib/db";
 import { eq } from "drizzle-orm";
 import { coupons, points, users } from "~/lib/db/schema";
 import { currentUser } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 
 export async function deleteUser(id: string) {
   const couponsToDelete = await db
@@ -16,6 +17,9 @@ export async function deleteUser(id: string) {
   }
 
   await db.delete(users).where(eq(users.id, id));
+
+  revalidatePath("/dashboard/ansvarig");
+  revalidatePath("/");
 }
 
 export async function changeUserRole(
@@ -44,6 +48,8 @@ export async function changeUserRole(
   }
 
   await db.update(users).set({ role: role }).where(eq(users.id, id));
+
+  revalidatePath("/dashboard/ansvarig");
 
   return {
     title: "Uppdaterad",

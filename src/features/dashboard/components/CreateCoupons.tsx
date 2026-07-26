@@ -8,6 +8,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { useToast } from "~/components/ui/use-toast";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CreateCoupons() {
   const [state, formAction] = useActionState(CreateCouponsAction, {
@@ -17,6 +18,7 @@ export default function CreateCoupons() {
   });
 
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     if (state.title === "") return;
@@ -25,7 +27,11 @@ export default function CreateCoupons() {
       title: state.title,
       description: state.description,
     });
-  }, [state, toast]);
+
+    if (state.success) {
+      router.refresh();
+    }
+  }, [state, toast, router]);
 
   return (
     <Card className="w-fit">

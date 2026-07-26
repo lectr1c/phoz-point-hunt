@@ -20,6 +20,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
+import { useRouter } from "next/navigation";
 
 export default function CreateTeam() {
   const [state, formAction] = useActionState(CreateTeamAction, {
@@ -29,6 +30,7 @@ export default function CreateTeam() {
   });
 
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     if (state.title === "") return;
@@ -37,7 +39,11 @@ export default function CreateTeam() {
       title: state.title,
       description: state.description,
     });
-  }, [state, toast]);
+
+    if (state.success) {
+      router.refresh();
+    }
+  }, [state, toast, router]);
 
   const [mainColor, setMainColor] = useState("#F00");
   const [secondaryColor, setSecondaryColor] = useState("#00F");

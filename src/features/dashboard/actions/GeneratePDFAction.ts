@@ -9,6 +9,7 @@ import stream from "stream";
 import { DOMParser } from "xmldom";
 import fs from "fs/promises";
 import path from "path";
+import { revalidatePath } from "next/cache";
 
 export default async function GeneratePDFAction() {
   const couponsDB = await db
@@ -133,6 +134,8 @@ export default async function GeneratePDFAction() {
         couponsDB.map((couponDB) => couponDB.id),
       ),
     );
+
+  revalidatePath("/dashboard/ansvarig");
 
   return {
     title: "PDF genererad",

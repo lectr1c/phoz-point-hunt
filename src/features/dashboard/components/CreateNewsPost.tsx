@@ -9,7 +9,7 @@ import { useToast } from "~/components/ui/use-toast";
 import { useEffect } from "react";
 import CreateNewsAction from "~/features/dashboard/actions/CreateNewsAction";
 import { Textarea } from "~/components/ui/textarea";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function CreateNewsPost() {
   const [state, formAction] = useActionState(CreateNewsAction, {
@@ -19,6 +19,7 @@ export default function CreateNewsPost() {
   });
 
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     if (state.title === "") return;
@@ -29,9 +30,9 @@ export default function CreateNewsPost() {
     });
 
     if (state.success) {
-      redirect("/");
+      router.refresh();
     }
-  }, [state, toast]);
+  }, [state, toast, router]);
 
   return (
     <Card className="w-fit">

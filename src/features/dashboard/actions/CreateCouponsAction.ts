@@ -3,6 +3,7 @@
 import {db} from "~/lib/db";
 import { coupons } from "~/lib/db/schema";
 import ShortUniqueId from "short-unique-id";
+import { revalidatePath } from "next/cache";
 
 export default async function CreateCouponsAction(prevState: {title: string, description: string, success: boolean}, formData: FormData) {
 
@@ -38,6 +39,8 @@ export default async function CreateCouponsAction(prevState: {title: string, des
 
 
     await db.insert(coupons).values(newCoupons);
+
+    revalidatePath("/dashboard/ansvarig");
 
     return { title: "Skapade Kuponger", description: `Skapade ${couponAmt} kuponger med värde ${couponWorth}`, success: true };
 }

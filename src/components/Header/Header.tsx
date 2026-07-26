@@ -6,13 +6,7 @@ import { cn } from "~/lib/utils";
 import SignButton from "~/components/common/SignButton";
 import { pages } from "./Pages";
 
-export function Header({
-  children,
-  role,
-}: {
-  children: React.ReactNode;
-  role: string;
-}) {
+export function Header({ role }: { role: string }) {
   const pathname = usePathname();
 
   return (
@@ -41,7 +35,6 @@ export function Header({
         </nav>
 
         <div className="flex items-center gap-3">
-          {children}
           <SignButton />
         </div>
       </div>

@@ -1,6 +1,7 @@
 "use server";
 import { db } from "~/lib/db";
 import { teams } from "~/lib/db/schema";
+import { revalidatePath } from "next/cache";
 
 export default async function CreateTeamAction(
   prevState: { title: string; description: string; success: boolean },
@@ -17,6 +18,9 @@ export default async function CreateTeamAction(
     mainColor: mainColor,
     secondaryColor: secondaryColor,
   });
+
+  revalidatePath("/dashboard/ansvarig");
+  revalidatePath("/");
 
   return {
     title: "Lag Skapad",

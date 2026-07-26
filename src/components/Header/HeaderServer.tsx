@@ -4,11 +4,7 @@ import { users } from "~/lib/db/schema";
 import { eq } from "drizzle-orm";
 import Header from "./Header";
 
-export async function HeaderServer({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export async function HeaderServer() {
   const user = await currentUser();
   let role = "";
 
@@ -21,5 +17,5 @@ export async function HeaderServer({
     }
   }
 
-  return <Header role={role}>{children}</Header>;
+  return <Header role={role} />;
 }

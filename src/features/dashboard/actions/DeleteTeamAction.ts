@@ -3,6 +3,7 @@
 import { db } from "~/lib/db";
 import { teams, users } from "~/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export default async function DeleteTeamAction(
   prevState: { title: string; description: string; success: boolean },
@@ -14,6 +15,9 @@ export default async function DeleteTeamAction(
 
   await db.update(users).set({ teamId: null }).where(eq(users.teamId, id));
   await db.delete(teams).where(eq(teams.id, id));
+
+  revalidatePath("/dashboard/ansvarig");
+  revalidatePath("/");
 
   return { title: "", description: "", success: true };
 }

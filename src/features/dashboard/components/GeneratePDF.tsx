@@ -13,6 +13,7 @@ import { useFormStatus } from "react-dom";
 import GeneratePDFAction from "~/features/dashboard/actions/GeneratePDFAction";
 import { useEffect, useState } from "react";
 import { useToast } from "~/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 function base64ToPdfBlob(base64: string) {
   const binary = atob(base64);
@@ -35,6 +36,7 @@ export default function GeneratePDF({
   });
 
   const { toast } = useToast();
+  const router = useRouter();
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -45,12 +47,16 @@ export default function GeneratePDF({
       description: state.description,
     });
 
+    if (state.success) {
+      router.refresh();
+    }
+
     if (state.pdfBase64) {
       const url = URL.createObjectURL(base64ToPdfBlob(state.pdfBase64));
       setDownloadUrl(url);
       return () => URL.revokeObjectURL(url);
     }
-  }, [state, toast]);
+  }, [state, toast, router]);
 
   return (
     <Card className="w-fit">

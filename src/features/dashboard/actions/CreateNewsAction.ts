@@ -2,6 +2,7 @@
 
 import { db } from "~/lib/db";
 import { news } from "~/lib/db/schema";
+import { revalidatePath } from "next/cache";
 
 export default async function CreateNewsAction(
   prevState: { title: string; description: string; success: boolean },
@@ -29,6 +30,9 @@ export default async function CreateNewsAction(
       success: false,
     };
   }
+
+  revalidatePath("/dashboard/ansvarig");
+  revalidatePath("/");
 
   return {
     title: "Succé",

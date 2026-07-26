@@ -4,6 +4,7 @@ import { db } from "~/lib/db";
 import { coupons, points, users } from "~/lib/db/schema";
 import ShortUniqueId from "short-unique-id";
 import { and, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export default async function RegisterPointsManAction(
   prevState: {
@@ -72,6 +73,9 @@ export default async function RegisterPointsManAction(
     .values([
       { couponId: couponID, userId: anonUser?.id, addedAt: new Date() },
     ]);
+
+  revalidatePath("/dashboard/ansvarig");
+  revalidatePath("/");
 
   return {
     title: "Registrerade poäng",

@@ -27,10 +27,9 @@ export default function RootLayout({
       <html lang="en">
         <body className={`font-sans ${inter.variable}`}>
           <SpaceBackground />
-          <HeaderServer>
-            <Toaster />
-          </HeaderServer>
+          <HeaderServer />
           {children}
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
